@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>健身 / 饮食计划 · 105kg → 90kg</title>
+<style>
+:root{
+  --bg:#0f1419; --bg2:#161d26; --bg3:#1e2732; --line:#2a3542;
+  --tx:#e6edf3; --tx2:#8b98a5; --tx3:#5d6b7a;
+  --ac:#3fb950; --ac2:#58a6ff; --warn:#d29922; --bad:#f85149;
+  --p:#58a6ff; --f:#d29922; --c:#a371f7; --fib:#3fb950;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--tx);
+  font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  padding:0 0 60px;
+}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+
+/* ---------- header ---------- */
+header{
+  background:linear-gradient(135deg,#161d26,#1e2732);
+  border-bottom:1px solid var(--line); padding:26px 0 22px; margin-bottom:0;
+}
+h1{font-size:24px;font-weight:600;letter-spacing:-.3px}
+h1 span{color:var(--ac)}
+.sub{color:var(--tx2);font-size:13px;margin-top:6px}
+.sub b{color:var(--tx);font-weight:500}
+
+/* ---------- tabs ---------- */
+nav{
+  background:var(--bg2); border-bottom:1px solid var(--line);
+  position:sticky; top:0; z-index:50;
+}
+nav .wrap{display:flex;gap:2px;overflow-x:auto}
+nav button{
+  background:none;border:none;color:var(--tx2);cursor:pointer;
+  padding:13px 18px;font-size:14px;font-family:inherit;
+  border-bottom:2px solid transparent;white-space:nowrap;
+}
+nav button:hover{color:var(--tx);background:#1b2430}
+nav button.on{color:var(--ac);border-bottom-color:var(--ac);font-weight:500}
+
+/* ---------- panels ---------- */
+.panel{display:none;padding-top:26px}
+.panel.on{display:block}
+
+h2{font-size:17px;font-weight:600;margin:30px 0 12px;display:flex;align-items:center;gap:9px}
+h2:first-child{margin-top:0}
+h2::before{content:'';width:3px;height:16px;background:var(--ac);border-radius:2px}
+h3{font-size:14px;font-weight:600;margin:18px 0 8px;color:var(--tx)}
+p{color:var(--tx2);margin:8px 0}
+p b,li b{color:var(--tx);font-weight:600}
+ul{margin:8px 0 8px 20px;color:var(--tx2)}
+li{margin:5px 0}
+code{background:var(--bg3);padding:1px 6px;border-radius:4px;font-size:13px;color:var(--ac2)}
+
+/* ---------- cards ---------- */
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}
+.card{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:10px;padding:16px 18px;
+}
+.stat .k{color:var(--tx3);font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+.stat .v{font-size:26px;font-weight:600;margin:4px 0 2px;letter-spacing:-.5px}
+.stat .n{color:var(--tx2);font-size:12px}
+.v.g{color:var(--ac)} .v.b{color:var(--ac2)} .v.y{color:var(--warn)} .v.r{color:var(--bad)}
+
+.note{
+  background:#161d26;border-left:3px solid var(--ac2);border-radius:0 8px 8px 0;
+  padding:12px 16px;margin:12px 0;font-size:13px;color:var(--tx2);
+}
+.note.w{border-left-color:var(--warn)}
+.note.d{border-left-color:var(--bad)}
+.note.g{border-left-color:var(--ac)}
+.note b{color:var(--tx)}
+.note .t{color:var(--tx);font-weight:600;display:block;margin-bottom:5px}
+
+/* ---------- tables ---------- */
+table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+th{
+  text-align:left;color:var(--tx3);font-weight:500;font-size:11px;
+  text-transform:uppercase;letter-spacing:.5px;
+  padding:8px 10px;border-bottom:1px solid var(--line);
+}
+td{padding:8px 10px;border-bottom:1px solid #1e2732;color:var(--tx2)}
+tr:hover td{background:#1a222c}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.name{color:var(--tx)}
+tbody tr.sum td{background:var(--bg3);color:var(--tx);font-weight:600;border-top:1px solid var(--line)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--bg2)}
+.tw table{margin:0}
+.tw th{background:#1a222c}
+
+/* ---------- meal ---------- */
+.meal{background:var(--bg2);border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+.meal>.h{
+  padding:11px 16px;background:#1a222c;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.meal>.h .nm{font-weight:600;font-size:14px}
+.meal>.h .tm{color:var(--tx3);font-size:12px;margin-left:8px;font-weight:400}
+.meal>.h .kc{color:var(--ac);font-size:13px;font-variant-numeric:tabular-nums}
+.meal table{margin:0}
+.meal td{border-bottom:1px solid #1a222c}
+.meal tr:last-child td{border-bottom:none}
+input[type=number]{
+  width:62px;background:var(--bg3);border:1px solid var(--line);color:var(--tx);
+  border-radius:5px;padding:3px 6px;font:inherit;font-size:13px;text-align:right;
+}
+input[type=number]:focus{outline:none;border-color:var(--ac2)}
+input[type=checkbox]{width:15px;height:15px;accent-color:var(--ac);cursor:pointer}
+input[type=text],input[type=date]{
+  background:var(--bg3);border:1px solid var(--line);color:var(--tx);
+  border-radius:5px;padding:6px 9px;font:inherit;font-size:13px;
+}
+.off{opacity:.35}
+
+/* ---------- progress ---------- */
+.bars{display:grid;gap:11px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.bar .lb{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+.bar .lb .l{color:var(--tx2)}
+.bar .lb .r{color:var(--tx);font-variant-numeric:tabular-nums}
+.bar .tr{height:7px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.bar .fl{height:100%;border-radius:4px;transition:width .25s}
+
+/* ---------- toggle ---------- */
+.seg{display:inline-flex;background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:3px;gap:3px}
+.seg button{
+  background:none;border:none;color:var(--tx2);cursor:pointer;
+  padding:7px 16px;border-radius:6px;font:inherit;font-size:13px;
+}
+.seg button.on{background:var(--ac);color:#0f1419;font-weight:600}
+
+/* ---------- badges ---------- */
+.bg{display:inline-block;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:500}
+.bg.lab{background:#1f3b2a;color:#5ed877}
+.bg.est{background:#3b2f1f;color:#e3b341}
+.bg.key{background:#1f2d3b;color:#79c0ff}
+
+/* ---------- workout day ---------- */
+.day{background:var(--bg2);border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+.day>.h{padding:12px 16px;background:#1a222c;border-bottom:1px solid var(--line)}
+.day>.h .t{font-weight:600;font-size:14px}
+.day>.h .t em{color:var(--ac);font-style:normal;margin-right:8px}
+.day>.h .d{color:var(--tx3);font-size:12px;margin-top:3px}
+.day table{margin:0;font-size:13px}
+.day td{border-bottom:1px solid #1a222c}
+.fin{padding:10px 16px;background:#141b24;border-top:1px solid var(--line);font-size:12px;color:var(--tx2)}
+.fin b{color:var(--warn)}
+
+/* ---------- log ---------- */
+.frm{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.fld{display:flex;flex-direction:column;gap:4px}
+.fld label{font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px}
+.btn{
+  background:var(--ac);color:#0f1419;border:none;border-radius:7px;
+  padding:8px 18px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;
+}
+.btn:hover{filter:brightness(1.12)}
+.btn.gh{background:none;border:1px solid var(--line);color:var(--tx2);font-weight:400}
+.btn.gh:hover{border-color:var(--bad);color:var(--bad);filter:none}
+canvas{width:100%;height:260px;display:block}
+.del{background:none;border:none;color:var(--tx3);cursor:pointer;font:inherit;padding:0 4px}
+.del:hover{color:var(--bad)}
+.empty{color:var(--tx3);text-align:center;padding:30px;font-size:13px}
+.foot{color:var(--tx3);font-size:12px;margin-top:34px;padding-top:16px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>健身 / 饮食计划 · <span>105kg → 90kg @ 20% 体脂</span></h1>
+    <div class="sub">男 · 38 岁 · 184cm · 105kg · 腰围 111cm &nbsp;|&nbsp; 增肌减脂同期 · 隔天一练 · 上下肢 4 天循环 &nbsp;|&nbsp; 能量单位统一 <b>kcal</b></div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <button class="on" data-t="ov">概览 &amp; 诊断</button>
+    <button data-t="diet">每日饮食</button>
+    <button data-t="tr">训练计划</button>
+    <button data-t="db">食材营养库</button>
+    <button data-t="log">记录 &amp; 曲线</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ================= 概览 ================= -->
+<section class="panel on" id="ov">
+
+  <h2>身体现状</h2>
+  <div class="grid g4">
+    <div class="card stat"><div class="k">体重</div><div class="v">105<small style="font-size:14px">kg</small></div><div class="n">BMI 31.0 · 肥胖 I 级</div></div>
+    <div class="card stat"><div class="k">体脂估算</div><div class="v y">30.8%</div><div class="n">RFM 公式 · 腰围推算</div></div>
+    <div class="card stat"><div class="k">去脂体重 LBM</div><div class="v b">72.6<small style="font-size:14px">kg</small></div><div class="n">这是要保住的部分</div></div>
+    <div class="card stat"><div class="k">脂肪总量</div><div class="v r">32.4<small style="font-size:14px">kg</small></div><div class="n">腰高比 0.60 · 偏高</div></div>
+  </div>
+
+  <div class="note w">
+    <span class="t">体脂 30.8% 是怎么来的</span>
+    你没有体脂数据，我用 <b>RFM（相对脂肪质量）</b>公式从腰围反推：<code>64 − 20 × (身高 ÷ 腰围) = 64 − 20 × (184 ÷ 111) = 30.8%</code>。
+    RFM 对男性的误差通常在 ±3–4%，比 BMI 靠谱，但不如 DEXA/InBody。<b>建议去测一次 InBody 或体脂秤</b>，测到了就把这个数换掉，后面所有推算会更准。
+  </div>
+
+  <h2>目标拆解</h2>
+  <div class="note g">
+    <span class="t">你这个目标选得很合理，先说结论</span>
+    当前 LBM 72.6kg。如果肌肉一点不掉，减到 20% 体脂时的体重就是 <code>72.6 ÷ 0.8 = 90.8kg</code> —— 和你自己定的 90kg 几乎完全吻合。
+    也就是说 <b>你不需要增肌就能达标，只需要减掉约 14.4kg 纯脂肪、同时把肌肉守住</b>。所以整个方案的核心不是"猛练猛减"，而是"制造温和缺口 + 用大重量和高蛋白保肌肉"。
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>项目</th><th class="n">现在</th><th class="n">目标</th><th class="n">变化</th></tr></thead>
+      <tbody>
+        <tr><td class="name">体重</td><td class="n">105.0 kg</td><td class="n">90.0 kg</td><td class="n" style="color:var(--bad)">−15.0 kg</td></tr>
+        <tr><td class="name">体脂率</td><td class="n">30.8 %</td><td class="n">20.0 %</td><td class="n" style="color:var(--ac)">−10.8 pt</td></tr>
+        <tr><td class="name">脂肪质量</td><td class="n">32.4 kg</td><td class="n">18.0 kg</td><td class="n" style="color:var(--ac)">−14.4 kg</td></tr>
+        <tr><td class="name">去脂体重 LBM</td><td class="n">72.6 kg</td><td class="n">72.0 kg</td><td class="n">≈ 持平（关键）</td></tr>
+        <tr><td class="name">腰围</td><td class="n">111 cm</td><td class="n">≈ 94–97 cm</td><td class="n" style="color:var(--ac)">−14 ~ −17 cm</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>能量预算</h2>
+  <div class="grid g4">
+    <div class="card stat"><div class="k">BMR 基础代谢</div><div class="v">2015</div><div class="n">Mifflin-St Jeor</div></div>
+    <div class="card stat"><div class="k">TDEE 总消耗</div><div class="v">2922</div><div class="n">BMR × 1.45（4 练 + 坐办公室）</div></div>
+    <div class="card stat"><div class="k">周均摄入</div><div class="v g">2383</div><div class="n">4 训练日 + 3 休息日</div></div>
+    <div class="card stat"><div class="k">日均缺口</div><div class="v b">539</div><div class="n">≈ 0.49 kg 脂肪 / 周</div></div>
+  </div>
+  <div class="grid g3" style="margin-top:12px">
+    <div class="card stat"><div class="k">训练日</div><div class="v">2595<small style="font-size:13px"> kcal</small></div><div class="n">蛋白 201g · 脂肪 70g · 碳水 287g</div></div>
+    <div class="card stat"><div class="k">休息日</div><div class="v">2100<small style="font-size:13px"> kcal</small></div><div class="n">蛋白 205g · 脂肪 59g · 碳水 191g</div></div>
+    <div class="card stat"><div class="k">预计周期</div><div class="v g">≈ 29 周</div><div class="n">约 6.8 个月到 90kg</div></div>
+  </div>
+
+  <h2>现状诊断：你现在吃的这套</h2>
+  <p>按你给的份量和四张标签实测数据算出来，你目前每天是：</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>指标</th><th class="n">你现在</th><th class="n">建议区间</th><th>判定</th></tr></thead>
+      <tbody>
+        <tr><td class="name">热量</td><td class="n">2070 kcal<br><span style="color:var(--tx3);font-size:11px">未含练前饼干</span></td><td class="n">2100–2600</td><td style="color:var(--warn)">偏低</td></tr>
+        <tr><td class="name">蛋白质</td><td class="n">181 g <span style="color:var(--tx3)">(2.49 g/kg LBM)</span></td><td class="n">180–210 g</td><td style="color:var(--ac)">达标，不用改</td></tr>
+        <tr><td class="name">脂肪</td><td class="n">49 g <span style="color:var(--tx3)">(0.47 g/kg)</span></td><td class="n">65–80 g</td><td style="color:var(--bad)">不足</td></tr>
+        <tr><td class="name">碳水</td><td class="n">217 g</td><td class="n">训练日 260–290 / 休息日 150–190</td><td style="color:var(--warn)">总量还行，但没分配</td></tr>
+        <tr><td class="name">膳食纤维</td><td class="n">11 g</td><td class="n">30–38 g</td><td style="color:var(--bad)">严重不足</td></tr>
+        <tr><td class="name">蔬菜</td><td class="n">0 g</td><td class="n">500–700 g</td><td style="color:var(--bad)">完全缺失</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note d">
+    <span class="t">问题 1：整天零蔬菜零水果 —— 这是最大的洞</span>
+    你的纤维只有 11g（几乎全部来自那 80g 燕麦），目标是 30g+。更要紧的是钾、镁、维生素 C、叶酸、维生素 A 全部靠不上任何来源。
+    在热量缺口里这些一缺，直接影响恢复质量、排便和训练时的状态。<b>每天 500–600g 蔬菜是这个计划里唯一不能砍的新增项。</b>
+  </div>
+
+  <div class="note d">
+    <span class="t">问题 2：脂肪只有 0.47 g/kg —— 38 岁不该这么低</span>
+    脂肪 49g 对 105kg 的你偏低。脂肪摄入过低会压低睾酮水平、影响关节润滑和脂溶性维生素（A/D/E/K）吸收。
+    38 岁本身睾酮已经在自然下滑，再叠加热量缺口 + 低脂肪，等于三重打击。<b>提到 65–80g</b>，来源用坚果、蛋黄、三文鱼，牛油果油那 6 喷（约 1.5mL / 12 kcal）在总量里可以忽略。
+  </div>
+
+  <div class="note w">
+    <span class="t">问题 3：卧推掉到 80kg×3，这是在掉肌肉的信号</span>
+    80kg × 3 反推 1RM 约 <b>85–88kg</b>（Epley 88 / Brzycki 84.7）。你说"只有 80kg 了"说明比之前退了。
+    蛋白 181g 其实够用，所以掉力量的原因大概率是另外三个：<b>总热量偏低（2070 vs TDEE 2922，缺口 850）</b>、<b>微量元素缺失导致恢复差</b>、
+    以及 <b>训练分化让每个部位 10 天才练 1 次</b>（详见训练计划页）。所以计划里我反而把你的热量<b>往上提了 313 kcal</b>——不是让你多吃变胖，是把缺口从 850 收到 539，用可持续的速度换取肌肉不掉。
+  </div>
+
+  <div class="note">
+    <span class="t">问题 4：只有 3 种蛋白来源</span>
+    鸡蛋 + 鸡胸 + 乳清，长期这样吃缺 Omega-3（EPA/DHA）、缺锌铁的多样性，而且很容易吃厌导致放弃。
+    建议 <b>每周 2 次用 150g 三文鱼替换掉一次鸡胸</b>，每周 1 次换成瘦牛肉或虾。成本不高，依从性会好很多。
+  </div>
+
+  <h2>时间轴预测</h2>
+  <p>按周均缺口 539 kcal、每周约 0.49kg 脂肪推算。<b>注意：体重下降后 TDEE 会跟着降，所以每 4 周要重算一次。</b></p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>阶段</th><th class="n">体重</th><th class="n">体脂率</th><th class="n">脂肪质量</th><th class="n">腰围（估）</th><th>该做的事</th></tr></thead>
+      <tbody>
+        <tr><td class="name">起点 · 第 0 周</td><td class="n">105.0 kg</td><td class="n">30.8 %</td><td class="n">32.4 kg</td><td class="n">111 cm</td><td>拍照 + 量腰围 + 测 InBody</td></tr>
+        <tr><td class="name">第 4 周</td><td class="n">103.0 kg</td><td class="n">29.5 %</td><td class="n">30.4 kg</td><td class="n">108 cm</td><td>第一次重算 TDEE</td></tr>
+        <tr><td class="name">第 8 周</td><td class="n">101.1 kg</td><td class="n">28.2 %</td><td class="n">28.5 kg</td><td class="n">107 cm</td><td>减载周（Deload）</td></tr>
+        <tr><td class="name">第 12 周</td><td class="n">99.1 kg</td><td class="n">26.8 %</td><td class="n">26.5 kg</td><td class="n">105 cm</td><td>重算 TDEE + 加重量</td></tr>
+        <tr><td class="name">第 16 周</td><td class="n">97.2 kg</td><td class="n">25.3 %</td><td class="n">24.6 kg</td><td class="n">103 cm</td><td>减载周</td></tr>
+        <tr><td class="name">第 20 周</td><td class="n">95.2 kg</td><td class="n">23.7 %</td><td class="n">22.6 kg</td><td class="n">101 cm</td><td>缺口可能要缩到 400</td></tr>
+        <tr><td class="name">第 29 周</td><td class="n">90.8 kg</td><td class="n">20.0 %</td><td class="n">18.2 kg</td><td class="n">≈ 96 cm</td><td class="name" style="color:var(--ac)">目标达成 → 转维持</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note w">
+    <span class="t">两件和健身无关但更重要的事</span>
+    <b>1. 去做一次体检。</b>BMI 31、腰围 111cm、38 岁男性，这个组合属于代谢综合征的典型画像。查血压、空腹血糖 + 糖化血红蛋白、血脂四项、肝功能、尿酸。
+    尤其是尿酸——你每天 8 个蛋 + 370g 鸡胸的高蛋白吃法，如果本身尿酸偏高需要提前知道。<b>我不是医生，这里给的是营养和训练安排，不构成医疗建议；有任何指标异常请以医生意见为准。</b><br><br>
+    <b>2. 你不做有氧我尊重，但请加"走路"。</b>不是有氧课，就是日常步数。目标每天 8000 步。这不占训练时间、不影响力量恢复，却能实打实地多消耗 200–300 kcal/天，
+    而且对心肺和血压的改善是训练后甩沙球给不了的。你现在 105kg，光是走路的消耗就比瘦人高不少，这是你目前的优势，用起来。
+  </div>
+</section>
+
+<!-- ================= 饮食 ================= -->
+<section class="panel" id="diet">
+
+  <h2>今日饮食</h2>
+  <p>勾选/取消可以模拟漏吃，克数可以直接改，下面的汇总和进度条会实时更新。所有热量单位都是 kcal。
+  香蕉<b>默认不勾选</b>（你说有时吃有时不吃），吃了就勾上。</p>
+
+  <div class="note d">
+    <span class="t">练前吃饼干的时机不对：提前量是 0 分钟</span>
+    你是热身完、正式训练开始前吃那包饼干。问题是<b>食物需要 30–60 分钟才能消化吸收进血液供能</b>，
+    而饼干每 100g 含 19.1g 脂肪（每包 7.6g），<b>脂肪会显著延缓胃排空</b>，实际到位时间只会更长。
+    <br><br>结果是两头都不讨好：这包饼干对 06:10–07:00 这段最需要发力的训练<b>几乎没有贡献</b>，能量到位时你已经快结束了；
+    而胃里装着东西做深蹲硬拉、还要憋气发力，只会让你难受。
+    <br><br><b>最小改动：把饼干挪到出门前在家吃</b>（约 05:45），到正式训练开始有 25 分钟提前量，比现在的 0 分钟强得多。
+  </div>
+
+  <div class="note g">
+    <span class="t">更好的改法：练前把饼干换成香蕉</span>
+    你本来就有时会吃香蕉。两者当练前餐直接比一比：
+    <div class="tw" style="margin:10px 0">
+      <table>
+        <thead><tr><th>练前选项</th><th class="n">热量</th><th class="n">碳水</th><th class="n">脂肪</th><th class="n">蛋白</th><th>消化速度</th></tr></thead>
+        <tbody>
+          <tr><td class="name">饼干 1 包 40g</td><td class="n">195 kcal</td><td class="n">26.3 g</td><td class="n" style="color:var(--bad)">7.64 g</td><td class="n">5.1 g</td><td>慢（高脂肪延缓胃排空）</td></tr>
+          <tr><td class="name">香蕉 1 根 120g</td><td class="n" style="color:var(--ac)">107 kcal</td><td class="n">27.4 g</td><td class="n" style="color:var(--ac)">0.36 g</td><td class="n">1.3 g</td><td class="name" style="color:var(--ac)">快（低脂 + 简单糖）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <b>碳水几乎一样（27.4 vs 26.3g），但香蕉少 89 kcal、脂肪几乎为零、消化快得多。</b>
+    也就是说香蕉能给你同样的训练燃料，却更适合"马上就要练"这个场景，还顺手省下热量。
+    <br><br>换算成结果：训练日从 2595 降到 <b>2507 kcal</b>，周均 2383 → <b>2332</b>，缺口 539 → <b>589</b>，
+    <b>周期从 29 周缩回 27 周</b>——等于白赚两周。
+    <br><br><span style="color:var(--tx3);font-size:12px">饼干不用扔，留着当加班或饿到不行时的应急零食。我把当前菜单按你的实际习惯（吃饼干、不吃香蕉）设成默认，
+    想试香蕉方案就把上面饼干取消勾选、香蕉勾上，数字会自己变。</span>
+  </div>
+
+  <div class="note">
+    <span class="t">还有个不花钱的改进：把那勺蛋白粉挪到练前</span>
+    你 06:00 开练，此时已经空腹一整夜（8–10 小时），而饼干只有 5g 蛋白。<b>空腹做大重量时肌肉分解率偏高</b>，
+    这在热量缺口 + 38 岁的组合下更明显。
+    <br><br>建议把早餐那勺乳清挪到练前，在家兑水摇一杯路上喝掉：
+    <ul style="margin-top:6px">
+      <li><b>练前</b>（05:45）：香蕉 + 1 勺乳清 = 237 kcal / <b>蛋白 26g</b> / 碳水 31g / 脂肪 2.4g</li>
+      <li><b>早餐</b>（08:30 练后）：燕麦 + 牛奶 + 4 个蛋 = 654 kcal / 蛋白 38g</li>
+    </ul>
+    <b>一天总量一个字没变</b>，只是把 25g 蛋白从"训后"挪到"训前"。练后 08:30 那顿 38g 蛋白仍然充足，
+    所谓"练后 30 分钟窗口"其实远没有传说中那么关键，全天总量和分布更重要。
+  </div>
+  <div class="seg" id="dayseg">
+    <button class="on" data-d="train">训练日 · 2595 kcal</button>
+    <button data-d="rest">休息日 · 2100 kcal</button>
+  </div>
+
+  <div id="meals"></div>
+
+  <h2>当日汇总</h2>
+  <div class="card">
+    <div class="bars" id="bars"></div>
+  </div>
+
+  <h2>这套菜单相比你现在改了什么</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th>改动</th><th>具体</th><th>为什么</th></tr></thead>
+      <tbody>
+        <tr><td class="name">＋ 每天 500–600g 蔬菜</td><td>午餐 300g、晚餐 300g，西兰花/菠菜/彩椒/香菇/番茄轮换</td><td>纤维 11g → 30g；补钾镁维C叶酸；增加饱腹感，热量代价只有 ~150 kcal</td></tr>
+        <tr><td class="name">＋ 睡前 1 包每日坚果</td><td>Member's Mark 30g/包 · 158 kcal（标签实测）</td><td>脂肪 49g → 59–63g，护激素和关节；顺带补镁 49mg、锌 0.8mg、铁 1.1mg、维E 1.4mg。独立包装省得称重，也不容易吃超</td></tr>
+        <tr><td class="name">练前饼干挪早 / 或换香蕉</td><td>从"热身后"改到"出门前 05:45"，或直接换 1 根香蕉</td><td>现在提前量是 0 分钟，能量到位时训练都快结束了。换香蕉还能省 89 kcal、周期缩回 27 周</td></tr>
+        <tr><td class="name">餐次时间对齐早上训练</td><td>早餐从 07:00 挪到 <b>08:30（练后 1 小时）</b>；晚餐 19:00 不再标"训后"</td><td>你 06:00–07:30 练，练后那顿才是早餐。原来把晚餐当训后餐是排错了</td></tr>
+        <tr><td class="name">米饭按训练日/休息日分配</td><td>训练日 300g+300g（熟重）／休息日 150g+150g</td><td>碳水放在需要它的日子，休息日省下的热量用来扩大缺口</td></tr>
+        <tr><td class="name">燕麦休息日减到 50g</td><td>训练日仍是 80g</td><td>你说的 80g = 330 kcal，休息日砍 30g 省 124 kcal，无痛</td></tr>
+        <tr><td class="name">休息日 ＋ 希腊酸奶 + 蓝莓</td><td>无脂希腊酸奶 150g + 蓝莓 100g</td><td>休息日热量低容易饿，这一份 146 kcal 给 15.7g 蛋白，性价比极高</td></tr>
+        <tr><td class="name">鸡蛋、鸡胸、蛋白粉、牛奶</td><td class="name" style="color:var(--ac)">完全不动</td><td>你现在这部分吃得对，蛋白 181g 已经达标，没必要改</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>执行细则</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3>必须做的</h3>
+      <ul>
+        <li><b>你有厨房秤，直接用起来。</b>这是整个计划里最省力也最关键的一件事——「大概 80g 燕麦」和「拳头大小米饭」的误差能到 ±300 kcal/天，正好等于你一整天的缺口。称 3 周形成手感后可以估，但<b>燕麦和米饭一直称</b>，它们单位热量最高，估错代价最大。每日坚果是 30g 独立包装不用称，<b>但一天就一包，别顺手开第二包</b>（多一包 = +158 kcal，你一天的缺口才 594，一包就吃掉四分之一）。</li>
+        <li><b>米饭一律按生米称：训练日 100g、休息日 50g。</b>不要称熟饭——熟重完全取决于你加多少水，同样 100g 生米可以煮出 250g 也可以煮出 320g，热量却一模一样。按生米称，误差为零。<br>
+        <span style="color:var(--tx3);font-size:12px">参考：100g 生米煮出来约 280–300g 熟饭（约 2.8–3.0 倍），差不多就是你原来说的 2 拳。50g 约 140–150g 熟饭。</span></li>
+        <li><b>每天 3.5–4 L 水。</b>高蛋白 + 高纤维不喝够水，第一周就会便秘。</li>
+        <li><b>每周固定 2 次三文鱼</b>（150g）替换午餐鸡胸，补 Omega-3。</li>
+        <li><b>每周同一天早上空腹称重 + 量腰围</b>，记到"记录"页。看 4 周趋势，别看单日波动。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>可以灵活的</h3>
+      <ul>
+        <li>蔬菜种类随便换，只要总量 500g+、颜色别单一。叶菜 + 十字花科 + 一种彩色蔬菜最省心。</li>
+        <li>米饭可以换等量碳水的红薯、玉米、全麦意面，换算见"食材营养库"页。</li>
+        <li>牛油果油 6 喷 ≈ 1.5mL ≈ 12 kcal，喷 10 下也就 20 kcal，<b>这个不用纠结</b>。</li>
+        <li>蛋白粉那一勺放早餐还是训后都行，全天总蛋白够就不影响结果。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>不要做的</h3>
+      <ul>
+        <li><b>不要再往下减热量。</b>你现在 2070 已经偏低了，力量在掉。热量不是越低越好。</li>
+        <li><b>不要断碳水。</b>你要保肌肉 + 推大重量，碳水是训练表现的燃料。</li>
+        <li><b>不要靠加练来加缺口。</b>缺口用吃控制，训练用来保肌肉，两件事别混。</li>
+        <li><b>不要天天称重焦虑。</b>一天差 1.5kg 全是水和食物残渣，看周平均。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>停滞了怎么办</h3>
+      <ul>
+        <li>先确认<b>连续 3 周</b>体重和腰围都没动，两周不算停滞。</li>
+        <li>第一步：检查称重准不准、有没有漏记（油、酱、饮料、水果）。</li>
+        <li>第二步：加日常活动量（步数 8000 → 11000），<b>别先砍热量</b>。</li>
+        <li>第三步：还不动，休息日再减 150 kcal（砍 150g 米饭）。</li>
+        <li>体重不动但腰围在掉 = 正在增肌减脂，<b>这是最好的情况，别改任何东西</b>。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 训练 ================= -->
+<section class="panel" id="tr">
+
+  <h2>先说为什么要改你现在的分化</h2>
+  <div class="note d">
+    <span class="t">你现在的问题：每个部位 10 天才练 1 次</span>
+    你的循环是 <code>手臂 → 胸 → 背 → 肩 → 腿</code>，5 天一轮，隔天一练。算一下：5 个训练日 × 隔天 = <b>10 天才走完一轮</b>。
+    也就是说你的腿、胸、背各自 <b>每 10 天只被训练 1 次</b>，折合每周 0.7 次。
+    肌肉蛋白合成在一次训练后 24–48 小时就回落到基线，等 10 天再练下一次，中间那 8 天基本是白等 —— 这是你在热量缺口下掉力量的主要结构性原因。
+    <br><br>研究比较一致的结论是<b>每个部位每周 2 次</b>明显优于 1 次。而且你把整整一天给了手臂，却让腿（全身最大肌群、消耗和激素反应最强、对减脂最有价值）10 天练一次，优先级正好是反的。
+  </div>
+  <div class="note g">
+    <span class="t">改成上下肢 4 天循环，频率直接翻倍</span>
+    <code>下肢A → 上肢A → 下肢B → 上肢B</code>，4 天一轮，还是隔天一练 —— <b>8 天走完一轮，每个部位每 8 天练 2 次 ≈ 每周 1.75 次</b>，是你现在的 2.5 倍。
+    你的训练天数、每次时长、隔天一练的节奏<b>一个都没变</b>，只是把动作重新分配了。手臂不再单独占一天，而是放在两个上肢日的末尾直接练，实际每周练到的次数反而更多。
+  </div>
+
+  <h2>起始重量</h2>
+  <div class="note w">
+    <span class="t">已确认的两个数据</span>
+    <b>卧推 80kg × 3</b> → 1RM 约 <b>86kg</b>（Epley 88.0 / Brzycki 84.7），按 86kg 算工作重量。<br>
+    <b>坐姿推肩 25kg 单边 × 12 × 4</b> → 总重 50kg × 12 次 → 1RM 约 <b>70kg 总重 = 35kg/只</b>（Epley）。
+    反过来验算：12RM 应该在 1RM 的 71% 左右 = 49.7kg 总重 ≈ <b>24.9kg/只</b>，和你实际的 25kg 几乎完全吻合，说明这个推算是可靠的。<br>
+    所以肩推起始工作重量：<b>4 组 × 6–10 次，用 27.5–30kg/只</b>。<br>
+    <span style="color:var(--tx3);font-size:12px">注：如果你那 12 次是"练到 12 就停"而不是"12 次力竭"，真实 1RM 还要更高，直接从 30kg/只 起步。</span><br><br>
+    <b>深蹲和硬拉你没给数据</b>，所以第一周当"找重量周"：从空杠开始，每组加 10–20kg，找到那个「做 8 次刚好还剩 2 次余力」的重量，记下来当起始工作重量。别第一周就冲极限。
+  </div>
+
+  <div class="note w">
+    <span class="t">一个值得注意的对比：你的肩比胸强</span>
+    肩推 1RM 70kg ÷ 卧推 1RM 86kg = <b>0.81</b>。一般人这个比值在 <b>0.6–0.67</b> 之间。
+    你的坐姿推肩有靠背支撑，本身会比站姿杠铃推举高一些，所以 0.81 不能全算异常 —— 但即便扣掉这个因素，比值还是偏高。
+    结合你自己说的"卧推只有 80kg 了"，两条线索指向同一个结论：<b>卧推是你目前的短板，退步的就是它。</b>
+    <br><br>所以训练计划里我把杠铃卧推排在上肢 A 的第一个动作、给了最多的组数和最长的组间休息（2–3 分钟），
+    <b>这是四天循环里唯一一个要求你「必须持续加重」的动作</b>。其他动作在减脂期守住就行，卧推要往回涨。
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>动作</th><th class="n">已知表现</th><th class="n">推算 1RM</th><th class="n">4×5-8 工作重量</th><th class="n">3×8-12 工作重量</th></tr></thead>
+      <tbody>
+        <tr><td class="name">杠铃卧推</td><td class="n">80kg × 3</td><td class="n">86 kg</td><td class="n" style="color:var(--ac)">67–72 kg</td><td class="n">60–67 kg</td></tr>
+        <tr><td class="name">坐姿哑铃推肩</td><td class="n">25kg/只 × 12</td><td class="n">35 kg/只<br><span style="color:var(--tx3);font-size:11px">总重 70kg</span></td><td class="n" style="color:var(--ac)">27.5–30 kg/只</td><td class="n">25–27.5 kg/只</td></tr>
+        <tr><td class="name">杠铃深蹲</td><td class="n" style="color:var(--tx3)">无数据</td><td class="n" style="color:var(--tx3)">—</td><td class="n">第 1 周测</td><td class="n">第 1 周测</td></tr>
+        <tr><td class="name">硬拉</td><td class="n" style="color:var(--tx3)">无数据</td><td class="n" style="color:var(--tx3)">—</td><td class="n">第 1 周测</td><td class="n">第 1 周测</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>4 天循环 · 隔天一练</h2>
+  <p><b>RIR</b> = 留几次余力（Reps In Reserve）。RIR 2 就是做完这组还能再做 2 次。<b>在热量缺口里千万别每组都做到力竭</b>，那样恢复跟不上，力量掉得更快。</p>
+  <div id="days"></div>
+
+  <h2>加重规则：双递进</h2>
+  <div class="note">
+    <span class="t">别凭感觉加重，用这个规则</span>
+    以卧推 <code>4 × 5-8 次</code> 为例：
+    <ul style="margin-top:6px">
+      <li>用 70kg 做到 <b>4 组全部达到 8 次</b>（区间上限）→ 下次加重到 72.5kg。</li>
+      <li>加重后可能只能做 5-6 次，<b>这是正常的</b>。继续用这个重量练，直到又能 4 组都做 8 次。</li>
+      <li>没达到区间下限（比如某组只有 4 次）→ 重量不动，继续磨。</li>
+      <li>加重幅度：<b>下肢大动作每次 +5kg，上肢每次 +2.5kg</b>，哑铃按现有档位跳。</li>
+    </ul>
+    热量缺口期能<b>把重量守住不掉</b>就已经是成功了，能小幅涨是额外奖励。别指望减脂期还能像增肌期那样一周一涨。
+  </div>
+
+  <h2>减载周（Deload）</h2>
+  <div class="note w">
+    <b>每 6–8 周安排 1 周减载</b>：重量降到平时的 60%，组数砍一半，次数不变。38 岁 + 热量缺口，累积疲劳比年轻时消得慢，
+    这一周不是浪费，是让关节和中枢神经系统追上来。<b>减载周结束后重量往往会跳一档</b>。按时间轴表，第 8 周和第 16 周各安排一次。
+  </div>
+
+  <h2>训练后心肺</h2>
+  <div class="note g">
+    <span class="t">你现在这样做是对的，我只做微调</span>
+    甩沙球、抡大绳（Battle Rope）本身没问题，而且比跑步机对你目前的膝踝更友好。三点建议：
+    <ul style="margin-top:6px">
+      <li><b>放在力量训练之后，绝不放前面。</b>你已经这么做了，保持。</li>
+      <li><b>控制在 6–10 分钟。</b>再长会侵蚀力量恢复。缺口该由吃来制造，不是靠甩绳子。</li>
+      <li><b>下肢日的心肺用上肢主导的动作</b>（战绳、药球过顶砸），<b>上肢日用下肢主导的</b>（雪橇推、跳箱），避开刚练过的部位。每个训练日的具体安排见上面各日卡片底部。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 营养库 ================= -->
+<section class="panel" id="db">
+  <h2>食材营养库</h2>
+  <p>
+    <span class="bg lab">标签实测</span> = 从你提供的包装标签照片（燕麦、牛奶、牛油果油、蛋白粉、每日坚果、生米）的营养成分表直接读出来的数据。
+    <span class="bg est">成分表估算</span> = 查食物成分表的通用值，可能有 ±10% 误差。
+  </p>
+  <div class="note">
+    <span class="t">千焦 → 千卡的换算</span>
+    五张国产标签写的是千焦（kJ），我全部换算成了 kcal：<code>kcal = kJ ÷ 4.184</code>。
+    燕麦 1724 → <b>412 kcal</b>／100g，牛奶 273 → <b>65 kcal</b>／100mL，牛油果油 3400 → <b>813 kcal</b>／100mL，
+    每日坚果 2210 → <b>528 kcal</b>／100g，生米 1468 → <b>351 kcal</b>／100g。
+    蛋白粉是美版标签，本来就标 Calories，不用换算。
+    <b>全站所有热量数字、汇总、进度条都只用 kcal</b>；千焦只在下表「备注」列里作为标签原始值保留，方便你对照包装核查。
+  </div>
+  <div class="tw">
+    <table id="dbtable">
+      <thead><tr>
+        <th>食材</th><th>来源</th><th class="n">热量 kcal</th><th class="n">蛋白 g</th>
+        <th class="n">脂肪 g</th><th class="n">碳水 g</th><th class="n">纤维 g</th><th>备注</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <h2>鸡蛋是怎么算的</h2>
+  <div class="note">
+    山姆大码鲜鸡蛋：<code>1.83kg ÷ 30 = 61g/个</code>（带壳）。蛋壳约占 11% → <b>可食部 54.3g</b>，其中蛋黄约 17g、蛋清约 37g。
+    <div class="tw" style="margin-top:10px">
+      <table>
+        <thead><tr><th>组合</th><th class="n">热量</th><th class="n">蛋白</th><th class="n">脂肪</th></tr></thead>
+        <tbody>
+          <tr><td class="name">1 个全蛋（54.3g 可食）</td><td class="n">78 kcal</td><td class="n">6.8 g</td><td class="n">5.2 g</td></tr>
+          <tr><td class="name">1 个蛋清（37g）</td><td class="n">19 kcal</td><td class="n">4.0 g</td><td class="n">0.1 g</td></tr>
+          <tr><td class="name">早餐：2 全蛋 + 2 蛋清</td><td class="n">194 kcal</td><td class="n">21.8 g</td><td class="n">10.4 g</td></tr>
+          <tr><td class="name">晚餐：1 全蛋 + 3 蛋清</td><td class="n">135 kcal</td><td class="n">18.9 g</td><td class="n">5.3 g</td></tr>
+          <tr class="sum"><td>全天 3 全蛋 + 5 蛋清</td><td class="n">329 kcal</td><td class="n">40.7 g</td><td class="n">15.8 g</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="note g">
+    <span class="t">蛋黄量按你的要求保持不变：3 全蛋 + 5 蛋清</span>
+    整个计划里的鸡蛋部分一个字没动，全天 <b>329 kcal / 40.7g 蛋白 / 15.8g 脂肪</b>。
+    <br><br>好消息是：<b>你那包练前饼干把脂肪缺口顺手填上了。</b>饼干每包带 7.6g 脂肪，
+    所以训练日脂肪已经到 <b>70g（0.66 g/kg）</b>，落进了 65–80g 的目标区间，<b>完全不需要动蛋黄</b>。
+    <br><br>唯一还偏低的是<b>休息日 59g（0.56 g/kg）</b>，因为休息日不吃饼干。不过激素这件事看的是<b>周均</b>而不是单日——
+    周均 <b>64.9g（0.62 g/kg）</b>，加上每周 2 次三文鱼后到 <b>69.2g（0.66 g/kg）</b>，够用了。
+    <br><br><span style="color:var(--tx3);font-size:12px">备选仍然保留，你不采纳完全没影响：如果哪天体检血脂正常，
+    多留 2 个蛋黄（改成 5 全蛋 + 3 蛋清）= +100 kcal / +10g 脂肪，可以把休息日也补齐，还顺带把 A/D/E/K、胆碱、叶黄素补上。</span>
+  </div>
+
+  <div class="note">
+    <span class="t">三文鱼现在的作用变了：只为 Omega-3，不再为凑脂肪</span>
+    脂肪缺口已经被饼干填上，所以每周 2 次三文鱼的价值<b>纯粹是补 EPA/DHA</b>——这个鸡蛋、鸡胸、乳清、坚果一个都给不了。
+    做法不变，每周 2 次用 <b>150g 三文鱼</b>替换午餐那 200g 鸡胸：
+    <ul style="margin-top:6px">
+      <li>三文鱼 150g = 312 kcal / 30.6g 蛋白 / <b>20.1g 脂肪</b></li>
+      <li>鸡胸 200g = 240 kcal / 45.0g 蛋白 / 5.2g 脂肪</li>
+      <li>净变化：<b>+72 kcal / +14.9g 脂肪 / −14.4g 蛋白</b>（蛋白降到 187g，仍是 2.57 g/kg LBM，足够）</li>
+    </ul>
+    另外<b>牛油果油不用再多喷了</b>——之前建议提到每餐 12 喷是为了凑脂肪，现在没这个需要，维持你原来的 6 喷就行。
+  </div>
+
+  <div class="note w">
+    <span class="t">注意：坚果里的 ω-3 替代不了三文鱼</span>
+    你那包坚果标签写了「不饱和脂肪酸 ω-3 每 100g 含 0.855g」，每包摊到 <b>0.26g</b>。这个数字看着有了，但它是 <b>ALA（α-亚麻酸，来自核桃）</b>，
+    不是 <b>EPA/DHA</b>。人体能把 ALA 转成 EPA 的效率只有 <b>5–10%</b>，转成 DHA 更低（<b>不到 1%</b>），而 EPA/DHA 才是真正管抗炎、心血管和恢复的那两个。
+    <br><br>换算一下：0.26g ALA 大约只等于 <b>0.02g EPA</b>，而 150g 三文鱼直接给你约 <b>2–3g EPA+DHA</b>，差了两个数量级。
+    所以坚果的 ω-3 当成额外福利就好，<b>每周 2 次三文鱼照旧，别省。</b>
+  </div>
+
+  <div class="note g">
+    <span class="t">这包坚果的隐藏加分项</span>
+    除了脂肪，它每包还带来 <b>镁 49mg、锌 0.8mg、铁 1.1mg、维生素 E 1.4mg</b>。
+    镁对你尤其有用——它参与肌肉放松和睡眠质量，而<b>热量缺口期最容易缺的就是镁</b>，缺了会表现为睡不沉、腿容易抽筋。放在睡前吃正好。
+    <br><br>唯一要留个心的：配料表里蔓越莓干和蓝莓干都含<b>白砂糖</b>，所以碳水 32.8g/100g 对坚果来说偏高（纯杏仁只有 21.6g）。
+    每天一包（9.8g 碳水）完全没问题，<b>但这就是为什么一天只能一包</b>——吃两包不只是多 158 kcal，添加糖也跟着翻倍。
+  </div>
+
+  <h2>米饭为什么改成按生米称</h2>
+  <div class="note d">
+    <span class="t">修正一个我之前算错的系数</span>
+    我早先写的是「熟米饭 116 kcal/100g，生米 × 2.25 = 熟重」。用你这张生米标签一验就不成立：
+    <br><br>100g 生米按 2.25 倍 = 225g 熟饭，再按 116 kcal/100g 算只有 <b>261 kcal</b>；可标签明写着 100g 生米 = <b>351 kcal</b>。
+    煮饭只是加水，<b>水不含热量，90 kcal 不会凭空消失</b>，所以错的是那个 2.25 倍。
+    <br><br>用热量和碳水两条独立反推真实倍数：<code>351 ÷ 116 = 3.02</code>、<code>78.4 ÷ 25.9 = 3.03</code> —— <b>实际约 2.8–3.0 倍</b>。
+    按错的系数称，你每餐会多吃 119 kcal，训练日两餐就是 <b>237 kcal/天</b>，正好吃掉你缺口的 40%。
+  </div>
+  <div class="note g">
+    <span class="t">改法：一律称生米，别称熟饭</span>
+    <b>训练日 100g 生米/餐，休息日 50g 生米/餐。</b>换成生米计量后热量几乎没变（原计划每餐 348 kcal，100g 生米 = 351 kcal），
+    但从此不再依赖任何估算——生米的数字直接来自标签。
+    <br><br>而且这样根本上解决了精度问题：<b>熟饭重量完全取决于你加多少水</b>，同样 100g 生米煮成 250g 或 320g，热量一模一样但称出来差 70g。
+    称生米，误差为零。
+    <div class="tw" style="margin-top:10px">
+      <table>
+        <thead><tr><th>份量</th><th class="n">热量</th><th class="n">蛋白</th><th class="n">脂肪</th><th class="n">碳水</th><th>煮出来大约</th></tr></thead>
+        <tbody>
+          <tr><td class="name">生米 100g（训练日/餐）</td><td class="n">351 kcal</td><td class="n">6.2 g</td><td class="n">0.8 g</td><td class="n">78.4 g</td><td>280–300 g 熟饭 ≈ 你说的 2 拳</td></tr>
+          <tr><td class="name">生米 50g（休息日/餐）</td><td class="n">175 kcal</td><td class="n">3.1 g</td><td class="n">0.4 g</td><td class="n">39.2 g</td><td>140–150 g 熟饭 ≈ 1 拳</td></tr>
+          <tr class="sum"><td>训练日全天（2 餐）</td><td class="n">702 kcal</td><td class="n">12.4 g</td><td class="n">1.6 g</td><td class="n">156.8 g</td><td>生米 200g</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2>主食等量替换（按 50g 碳水）</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th>食物</th><th class="n">份量</th><th class="n">热量</th><th class="n">蛋白</th><th class="n">纤维</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td class="name">生米（粳米）</td><td class="n">64 g<br><span style="color:var(--tx3);font-size:11px">≈ 180g 熟饭</span></td><td class="n">224 kcal</td><td class="n">4.0 g</td><td class="n">0.4 g</td><td class="name" style="color:var(--ac2)">你现在的主食，基准（标签实测）</td></tr>
+        <tr><td class="name">蒸红薯</td><td class="n">249 g</td><td class="n">214 kcal</td><td class="n">4.0 g</td><td class="n">7.5 g</td><td class="name" style="color:var(--ac)">纤维高 12 倍，推荐换</td></tr>
+        <tr><td class="name">熟全麦意面</td><td class="n">192 g</td><td class="n">232 kcal</td><td class="n">9.6 g</td><td class="n">7.7 g</td><td>蛋白和纤维都更好</td></tr>
+        <tr><td class="name">煮玉米</td><td class="n">243 g</td><td class="n">231 kcal</td><td class="n">8.0 g</td><td class="n">5.6 g</td><td>饱腹感强</td></tr>
+        <tr><td class="name">燕麦（干重）</td><td class="n">91 g</td><td class="n">375 kcal</td><td class="n">11.1 g</td><td class="n">9.5 g</td><td>脂肪较高，热量不划算</td></tr>
+        <tr><td class="name">土豆（蒸）</td><td class="n">294 g</td><td class="n">250 kcal</td><td class="n">5.9 g</td><td class="n">6.5 g</td><td>钾含量高</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>蛋白来源性价比（每 30g 蛋白的代价）</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th>来源</th><th class="n">需要份量</th><th class="n">热量</th><th class="n">脂肪</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="name">蛋清</td><td class="n">275 g（≈7.4 个）</td><td class="n">143 kcal</td><td class="n">0.5 g</td><td>最省热量，但零微量元素</td></tr>
+        <tr><td class="name">虾</td><td class="n">125 g</td><td class="n">124 kcal</td><td class="n">0.4 g</td><td>极高性价比，可以多用</td></tr>
+        <tr><td class="name">无脂希腊酸奶</td><td class="n">300 g</td><td class="n">177 kcal</td><td class="n">1.2 g</td><td>加餐首选</td></tr>
+        <tr><td class="name">乳清蛋白粉</td><td class="n">42 g（1.2 勺）</td><td class="n">156 kcal</td><td class="n">2.4 g</td><td>最方便</td></tr>
+        <tr><td class="name">生鸡胸</td><td class="n">133 g</td><td class="n">160 kcal</td><td class="n">3.5 g</td><td>你的主力，很合适</td></tr>
+        <tr><td class="name">瘦牛肉</td><td class="n">141 g</td><td class="n">201 kcal</td><td class="n">8.2 g</td><td>补铁锌，每周 1 次</td></tr>
+        <tr><td class="name">三文鱼</td><td class="n">147 g</td><td class="n">306 kcal</td><td class="n">19.7 g</td><td class="name" style="color:var(--ac2)">热量高但 Omega-3 无可替代</td></tr>
+        <tr><td class="name">全蛋</td><td class="n">238 g（≈4.4 个）</td><td class="n">340 kcal</td><td class="n">22.6 g</td><td>营养最全面，热量代价大</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 记录 ================= -->
+<section class="panel" id="log">
+  <h2>记录体重 &amp; 腰围</h2>
+  <p>每周固定同一天、<b>早上空腹排空后</b>称。腰围量肚脐水平，自然呼气末，别收腹。数据存在这台电脑的浏览器里（localStorage），不上传任何地方。</p>
+  <div class="card">
+    <div class="frm">
+      <div class="fld"><label>日期</label><input type="date" id="i-date"></div>
+      <div class="fld"><label>体重 kg</label><input type="number" id="i-w" step="0.1" placeholder="105.0"></div>
+      <div class="fld"><label>腰围 cm</label><input type="number" id="i-waist" step="0.5" placeholder="111"></div>
+      <div class="fld"><label>体脂 %（可空）</label><input type="number" id="i-bf" step="0.1" placeholder="30.8"></div>
+      <div class="fld"><label>备注</label><input type="text" id="i-note" placeholder="卧推 72.5kg×6" style="width:200px"></div>
+      <button class="btn" id="add">保存</button>
+    </div>
+  </div>
+
+  <h2>趋势曲线</h2>
+  <div class="card"><canvas id="chart"></canvas></div>
+  <p style="font-size:12px">
+    <span style="color:var(--ac2)">━</span> 体重 kg &nbsp;&nbsp;
+    <span style="color:var(--warn)">━</span> 腰围 cm &nbsp;&nbsp;
+    <span style="color:var(--tx3)">┄</span> 目标线（90kg / 96cm）
+  </p>
+  <div class="note">
+    <b>体重不动但腰围在掉 = 你在同时增肌减脂，这是最理想的结果。</b>所以腰围这一列比体重更值得关注，千万别只记体重。
+  </div>
+
+  <h2>记录明细</h2>
+  <div class="tw">
+    <table id="logtable">
+      <thead><tr>
+        <th>日期</th><th class="n">体重</th><th class="n">较上次</th><th class="n">腰围</th>
+        <th class="n">较上次</th><th class="n">体脂</th><th>备注</th><th></th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <div style="margin-top:12px"><button class="btn gh" id="clr">清空全部记录</button></div>
+
+  <div class="foot">
+    数据来源：牛油果油 / 燕麦 / 牛奶 / 蛋白粉 四项为你提供的包装标签实测值，其余为食物成分表通用值。
+    体脂率由 RFM 公式经腰围推算，非实测。本页内容为训练与营养安排，不构成医疗建议。
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<script>
+/* ================= 食材库（每 100g / 100mL，热量单位 kcal） ================= */
+var DB = {
+  oat:      {nm:'高纤快熟燕麦片',   src:'lab', kcal:412.0, p:12.2,  f:13.6, c:54.7, fib:10.4, u:'g',  note:'标签原文 1724 千焦 = 412 kcal · 含奇亚籽5%+亚麻籽5% · 包装建议单份30g'},
+  milk:     {nm:'全脂牛奶 UHT',     src:'lab', kcal:65.2,  p:3.4,   f:3.6,  c:4.8,  fib:0,    u:'mL', note:'标签原文 273 千焦 = 65 kcal · 钙 124mg · 200mL/瓶 = 130 kcal'},
+  avo_oil:  {nm:'牛油果油',         src:'lab', kcal:812.6, p:0,     f:91.9, c:0,    fib:0,    u:'mL', note:"标签原文 3400 千焦 = 813 kcal · Member's Mark 西班牙 · 喷壶每喷≈0.25mL"},
+  whey:     {nm:'乳清蛋白粉',       src:'lab', kcal:371.4, p:71.43, f:5.71, c:11.43,fib:2.86, u:'g',  note:'标签 35g/勺 = 130 kcal / 25g 蛋白 · 分离乳清+浓缩乳清'},
+  egg_whole:{nm:'全蛋（可食部）',   src:'est', kcal:143.0, p:12.6,  f:9.5,  c:0.7,  fib:0,    u:'g',  note:'山姆大码 61g/个带壳 → 可食 54.3g'},
+  egg_white:{nm:'蛋清',             src:'est', kcal:52.0,  p:10.9,  f:0.17, c:0.73, fib:0,    u:'g',  note:'1 个大码蛋约 37g 蛋清'},
+  rice_raw: {nm:'生米（粳米）',     src:'lab', kcal:350.9, p:6.2,   f:0.8,  c:78.4, fib:0.6,  u:'g',  note:"标签原文 1468 千焦 = 351 kcal · Member's Mark 吉林粳米 · 钠 0mg · 按生米称重，煮出来约 2.8–3.0 倍熟饭 · 纤维为估算值（标签未标）"},
+  biscuit:  {nm:'饼干（练前）',     src:'lab', kcal:488.3, p:12.8,  f:19.1, c:65.8, fib:1.5,  u:'g',  note:'标签原文 2043 千焦 = 488 kcal · 1.2kg=40g×30包 · 每包 195 kcal · 反式脂肪 0g · 钠 455mg / 钙 428mg 每100g · 纤维为估算值（标签未标）'},
+  chk_raw:  {nm:'生鸡胸（去皮）',   src:'est', kcal:120.0, p:22.5,  f:2.6,  c:0,    fib:0,    u:'g',  note:'生重计。煎熟失水约 25%'},
+  chk_pre:  {nm:'熟成鸡胸（预制）', src:'est', kcal:113.1, p:22.6,  f:2.08, c:1.19, fib:0,    u:'g',  note:'按你说的 168g/包含 38g 蛋白反推 · 建议核对包装标签'},
+  broccoli: {nm:'西兰花',           src:'est', kcal:34.0,  p:2.8,   f:0.4,  c:7.0,  fib:2.6,  u:'g',  note:'十字花科 · 维C 和纤维都高'},
+  spinach:  {nm:'菠菜',             src:'est', kcal:23.0,  p:2.9,   f:0.4,  c:3.6,  fib:2.2,  u:'g',  note:'叶酸、镁、钾'},
+  pepper:   {nm:'彩椒',             src:'est', kcal:26.0,  p:1.0,   f:0.2,  c:6.0,  fib:2.1,  u:'g',  note:'维C 极高 · 生吃更好'},
+  mushroom: {nm:'香菇（鲜）',       src:'est', kcal:26.0,  p:2.2,   f:0.3,  c:5.2,  fib:2.3,  u:'g',  note:'鲜味来源 · 可减少用盐'},
+  tomato:   {nm:'番茄',             src:'est', kcal:18.0,  p:0.9,   f:0.2,  c:3.9,  fib:1.2,  u:'g',  note:'番茄红素 · 熟吃吸收更好'},
+  mixnut:   {nm:'每日坚果（坚果+果干）', src:'lab', kcal:528.2, p:13.8,  f:36.8, c:32.8, fib:7.0,  u:'g',  note:"标签原文 2210 千焦 = 528 kcal · Member's Mark 900g=30g×30包 · 每包 158 kcal · 镁 163mg / 锌 2.66mg / 铁 3.6mg / 维E 4.8mg / ω-3(ALA) 0.855mg 均按每 100g"},
+  almond:   {nm:'杏仁（对照参考）', src:'est', kcal:579.0, p:21.2,  f:49.9, c:21.6, fib:12.5, u:'g',  note:'纯坚果对照组 · 不在你的菜单里 · 脂肪和纤维都比混合装高，因为混合装掺了果干和糖'},
+  banana:   {nm:'香蕉',             src:'est', kcal:89.0,  p:1.1,   f:0.3,  c:22.8, fib:2.6,  u:'g',  note:'训练前 45–60 分钟吃'},
+  blueberry:{nm:'蓝莓',             src:'est', kcal:57.0,  p:0.7,   f:0.3,  c:14.5, fib:2.4,  u:'g',  note:'抗氧化 · 冷冻装更便宜'},
+  gr_yog:   {nm:'希腊酸奶（无脂）', src:'est', kcal:59.0,  p:10.0,  f:0.4,  c:3.6,  fib:0,    u:'g',  note:'加餐性价比最高 · 选无糖'},
+  salmon:   {nm:'三文鱼（生）',     src:'est', kcal:208.0, p:20.4,  f:13.4, c:0,    fib:0,    u:'g',  note:'每周 2 次 150g 替换鸡胸'}
+};
+
+var EGG_W = 54.3, EGG_C = 37.0, SPRAY = 0.25;
+
+/* ================= 菜单 ================= */
+function E(k,g,lbl,opt){ return {k:k, g:g, lbl:lbl, opt:opt}; }
+var MENUS = {
+  train: [
+    {nm:'练前（热身后）', tm:'06:00 · 训练 06:00–07:30', items:[
+      E('biscuit',40,'1 包 · 40g'),
+      E('banana',120,'1 根 · 可选，默认不计入',true)]},
+    {nm:'早餐（训练后）', tm:'08:30 · 练后约 1 小时', items:[
+      E('oat',80), E('whey',35,'1 勺'), E('milk',200,'1 瓶'),
+      E('egg_whole',2*EGG_W,'2 个全蛋'), E('egg_white',2*EGG_C,'2 个蛋清')]},
+    {nm:'午餐', tm:'12:00', items:[
+      E('rice_raw',100,'生米称重 → 约 280–300g 熟饭'), E('chk_raw',200,'生重'),
+      E('broccoli',200), E('pepper',100), E('avo_oil',6*SPRAY,'喷 6 下')]},
+    {nm:'晚餐', tm:'19:00', items:[
+      E('rice_raw',100,'生米称重 → 约 280–300g 熟饭'), E('chk_pre',168,'1 盒'),
+      E('egg_whole',EGG_W,'1 个全蛋'), E('egg_white',3*EGG_C,'3 个蛋清'),
+      E('spinach',200), E('mushroom',100), E('avo_oil',6*SPRAY,'喷 6 下')]},
+    {nm:'睡前', tm:'22:30', items:[ E('mixnut',30,'1 包 · 30g') ]}
+  ],
+  rest: [
+    {nm:'早餐', tm:'07:00 · 休息日不吃饼干', items:[
+      E('oat',50,'比训练日少 30g'), E('whey',35,'1 勺'), E('milk',200,'1 瓶'),
+      E('egg_whole',2*EGG_W,'2 个全蛋'), E('egg_white',2*EGG_C,'2 个蛋清')]},
+    {nm:'午餐', tm:'12:00', items:[
+      E('rice_raw',50,'生米称重 → 约 140–150g 熟饭'), E('chk_raw',200,'生重'),
+      E('broccoli',250), E('tomato',150), E('avo_oil',6*SPRAY,'喷 6 下')]},
+    {nm:'下午加餐', tm:'16:00', items:[ E('gr_yog',150), E('blueberry',100) ]},
+    {nm:'晚餐', tm:'19:00', items:[
+      E('rice_raw',50,'生米称重 → 约 140–150g 熟饭'), E('chk_pre',168,'1 盒'),
+      E('egg_whole',EGG_W,'1 个全蛋'), E('egg_white',3*EGG_C,'3 个蛋清'),
+      E('spinach',250), E('mushroom',100), E('avo_oil',6*SPRAY,'喷 6 下')]},
+    {nm:'睡前', tm:'22:30', items:[ E('mixnut',30,'1 包 · 30g') ]}
+  ]
+};
+var TARGET = {
+  train: {kcal:2595, p:201, f:70, c:287, fib:27},
+  rest:  {kcal:2100, p:205, f:59, c:191, fib:27}
+};
+var curDay = 'train', state = {};
+
+/* ================= 训练计划 ================= */
+var DAYS = [
+  {c:'A', nm:'下肢 A · 蹲主导', d:'股四头 + 臀 + 小腿 + 核心 · 约 70 分钟',
+   ex:[
+    ['杠铃深蹲','4','6–8','2','2–3 分钟','第 1 周找重量。深度到大腿平行地面即可，不必强求极限'],
+    ['罗马尼亚硬拉','3','8–10','2','2 分钟','感受股二头拉伸，背始终绷直，别弓背'],
+    ['腿举','3','10–12','1–2','90 秒','深蹲后补量，膝盖不要内扣'],
+    ['坐姿腿弯举','3','12–15','1','60 秒','单独打股二头，深蹲练不到'],
+    ['站姿提踵','4','12–15','1','60 秒','顶峰停 1 秒，别弹'],
+    ['悬垂举腿 / 卷腹','3','10–15','1','60 秒','腹部直接训练'] ],
+   fin:'药球过顶砸地 5 × 10 次（组间 45 秒）—— 上肢主导，避开刚练完的腿。总时长 6–8 分钟。'},
+  {c:'B', nm:'上肢 A · 水平推拉', d:'胸 + 背厚度 + 侧肩 + 手臂 · 约 80 分钟',
+   ex:[
+    ['杠铃卧推','4','5–8','2','2–3 分钟','主项。起始 67–72kg（按 1RM 86kg 推算），这个动作要优先进步'],
+    ['单臂哑铃划船','4','8–10','2','90 秒','每侧都做。拉到肋骨侧，别用腰甩'],
+    ['上斜哑铃卧推','3','8–12','2','90 秒','30–35 度，补上胸'],
+    ['坐姿绳索划船','3','10–12','1–2','90 秒','肩胛主动后收，感受背中部'],
+    ['哑铃侧平举','3','12–15','1','60 秒','轻重量高次数，别甩。这是让肩变宽的关键'],
+    ['绳索三头下压','3','10–12','1','60 秒','肘固定在体侧'],
+    ['哑铃弯举','3','10–12','1','60 秒','手臂不再单独占一天，放这里练'] ],
+   fin:'战绳双臂交替 8 × 20 秒 / 休 40 秒 —— 如果上肢已经很累，换成雪橇推或原地登阶 6 分钟。'},
+  {c:'C', nm:'下肢 B · 髋主导', d:'臀 + 股二头 + 单腿稳定 + 握力 · 约 70 分钟',
+   ex:[
+    ['硬拉（常规或六角杠）','4','4–6','2','3 分钟','六角杠对下背更友好，105kg 起步优先选它'],
+    ['保加利亚分腿蹲','3','8–10 / 腿','2','90 秒','单腿稳定性 + 髋灵活性，前期用自重或轻哑铃'],
+    ['杠铃臀推','3','8–12','1–2','2 分钟','臀部最直接的动作，顶峰夹紧 1 秒'],
+    ['腿屈伸','3','12–15','1','60 秒','孤立股四头，收尾用'],
+    ['农夫行走','3','40 米','—','90 秒','握力 + 核心 + 斜方，全身受益'],
+    ['死虫 / 平板支撑','3','30–45 秒','—','45 秒','抗伸展核心，护腰'] ],
+   fin:'战绳绕环 6 × 20 秒 / 休 40 秒 —— 上肢主导，让腿休息。'},
+  {c:'D', nm:'上肢 B · 垂直推拉', d:'肩 + 背宽度 + 上胸 + 后束 + 手臂 · 约 80 分钟',
+   ex:[
+    ['坐姿哑铃推肩','4','6–10','2','2 分钟','起始 27.5–30kg/只（你现在 25kg×12，1RM 约 35kg/只）。加重按哑铃档位跳 2.5kg'],
+    ['引体向上（可用辅助）','4','6–10','2','2 分钟','105kg 做不起来就用辅助器械或弹力带，别跳过'],
+    ['双杠臂屈伸 / 器械推胸','3','8–12','2','90 秒','肩不适就换器械推胸'],
+    ['对握高位下拉','3','10–12','1–2','90 秒','练背宽度，肘往下拉不是往后'],
+    ['绳索面拉','3','15–20','1','60 秒','修肩姿态，久坐办公必做，别省'],
+    ['哑铃俯身后束飞鸟','3','15','1','60 秒','后束是最容易被忽略的部位'],
+    ['过顶臂屈伸 + 锤式弯举','3','10–12','1','60 秒','三头长头 + 手臂厚度'] ],
+   fin:'雪橇推 6 × 20 米，或跳箱 5 × 5 次（落地要轻）—— 下肢主导，避开刚练完的上肢。'}
+];
+
+/* ================= 渲染 ================= */
+function $(s){ return document.querySelector(s); }
+function el(t,c,h){ var e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e; }
+function macro(k,g){ var d=DB[k]; return {kcal:d.kcal*g/100, p:d.p*g/100, f:d.f*g/100, c:d.c*g/100, fib:d.fib*g/100}; }
+function r0(n){ return Math.round(n); }
+function r1(n){ return (Math.round(n*10)/10).toFixed(1); }
+
+function key(mi,ii){ return curDay+'-'+mi+'-'+ii; }
+
+function buildMeals(){
+  var host = $('#meals'); host.innerHTML='';
+  MENUS[curDay].forEach(function(meal,mi){
+    var box = el('div','meal');
+    var head = el('div','h');
+    head.appendChild(el('div',null,'<span class="nm">'+meal.nm+'</span><span class="tm">'+meal.tm+'</span>'));
+    var kc = el('div','kc'); kc.id='mk-'+mi; head.appendChild(kc);
+    box.appendChild(head);
+
+    var tb = el('table');
+    tb.innerHTML = '<thead><tr><th style="width:34px"></th><th>食材</th><th class="n" style="width:96px">份量</th>'+
+      '<th class="n" style="width:78px">热量</th><th class="n" style="width:64px">蛋白</th>'+
+      '<th class="n" style="width:64px">脂肪</th><th class="n" style="width:64px">碳水</th><th class="n" style="width:64px">纤维</th></tr></thead><tbody></tbody>';
+    var body = tb.querySelector('tbody');
+
+    meal.items.forEach(function(it,ii){
+      var kk = key(mi,ii);
+      if(state[kk]===undefined) state[kk]={on:!it.opt, g:it.g};
+      var d = DB[it.k];
+      var tr = el('tr'); tr.id='row-'+kk;
+      tr.innerHTML =
+        '<td><input type="checkbox" data-kk="'+kk+'" '+(state[kk].on?'checked':'')+'></td>'+
+        '<td class="name">'+d.nm+(it.lbl?' <span style="color:var(--tx3);font-size:12px">'+it.lbl+'</span>':'')+'</td>'+
+        '<td class="n"><input type="number" data-kk="'+kk+'" value="'+(Math.round(state[kk].g*10)/10)+'" step="5" min="0"> <span style="color:var(--tx3);font-size:11px">'+d.u+'</span></td>'+
+        '<td class="n" data-c="kcal"></td><td class="n" data-c="p"></td><td class="n" data-c="f"></td>'+
+        '<td class="n" data-c="c"></td><td class="n" data-c="fib"></td>';
+      body.appendChild(tr);
+    });
+    var sum = el('tr','sum');
+    sum.innerHTML='<td></td><td>小计</td><td></td><td class="n" data-s="kcal"></td><td class="n" data-s="p"></td>'+
+      '<td class="n" data-s="f"></td><td class="n" data-s="c"></td><td class="n" data-s="fib"></td>';
+    sum.id='sum-'+mi; body.appendChild(sum);
+
+    box.appendChild(tb); host.appendChild(box);
+  });
+  recalc();
+}
+
+function onEdit(e){
+  var t=e.target, kk=t.getAttribute('data-kk'); if(!kk) return;
+  if(t.type==='checkbox') state[kk].on=t.checked;
+  else state[kk].g=Math.max(0, parseFloat(t.value)||0);
+  recalc();
+}
+
+function recalc(){
+  var tot={kcal:0,p:0,f:0,c:0,fib:0};
+  MENUS[curDay].forEach(function(meal,mi){
+    var ms={kcal:0,p:0,f:0,c:0,fib:0};
+    meal.items.forEach(function(it,ii){
+      var kk=key(mi,ii), st=state[kk], row=document.getElementById('row-'+kk);
+      var m=macro(it.k, st.on?st.g:0);
+      row.className = st.on?'':'off';
+      row.querySelector('[data-c=kcal]').textContent=r0(m.kcal);
+      row.querySelector('[data-c=p]').textContent=r1(m.p);
+      row.querySelector('[data-c=f]').textContent=r1(m.f);
+      row.querySelector('[data-c=c]').textContent=r1(m.c);
+      row.querySelector('[data-c=fib]').textContent=r1(m.fib);
+      for(var k in ms) ms[k]+=m[k];
+    });
+    var sr=document.getElementById('sum-'+mi);
+    sr.querySelector('[data-s=kcal]').textContent=r0(ms.kcal);
+    sr.querySelector('[data-s=p]').textContent=r1(ms.p);
+    sr.querySelector('[data-s=f]').textContent=r1(ms.f);
+    sr.querySelector('[data-s=c]').textContent=r1(ms.c);
+    sr.querySelector('[data-s=fib]').textContent=r1(ms.fib);
+    document.getElementById('mk-'+mi).textContent=r0(ms.kcal)+' kcal';
+    for(var k2 in tot) tot[k2]+=ms[k2];
+  });
+  drawBars(tot);
+}
+
+function drawBars(t){
+  var T=TARGET[curDay];
+  var defs=[
+    ['热量','kcal',t.kcal,T.kcal,'kcal','var(--ac)'],
+    ['蛋白质','p',t.p,T.p,'g','var(--p)'],
+    ['脂肪','f',t.f,T.f,'g','var(--f)'],
+    ['碳水','c',t.c,T.c,'g','var(--c)'],
+    ['膳食纤维','fib',t.fib,T.fib,'g','var(--fib)']
+  ];
+  var host=$('#bars'); host.innerHTML='';
+  defs.forEach(function(d){
+    var pct=Math.min(100, d[3]?d[2]/d[3]*100:0);
+    var b=el('div','bar');
+    b.innerHTML='<div class="lb"><span class="l">'+d[0]+'</span><span class="r">'+
+      (d[1]==='kcal'?r0(d[2]):r1(d[2]))+' / '+d[3]+' '+d[4]+
+      ' <span style="color:var(--tx3)">('+r0(pct)+'%)</span></span></div>'+
+      '<div class="tr"><div class="fl" style="width:'+pct+'%;background:'+d[5]+'"></div></div>';
+    host.appendChild(b);
+  });
+}
+
+function buildDays(){
+  var host=$('#days');
+  DAYS.forEach(function(d,i){
+    var box=el('div','day');
+    box.appendChild(el('div','h','<div class="t"><em>第 '+(i+1)+' 练 · '+d.c+'</em>'+d.nm+'</div><div class="d">'+d.d+'</div>'));
+    var tb=el('table');
+    tb.innerHTML='<thead><tr><th>动作</th><th class="n" style="width:52px">组数</th><th class="n" style="width:74px">次数</th>'+
+      '<th class="n" style="width:52px">RIR</th><th class="n" style="width:88px">组间休息</th><th>要点</th>'+
+      '<th class="n" style="width:96px">本次重量</th></tr></thead><tbody></tbody>';
+    var body=tb.querySelector('tbody');
+    d.ex.forEach(function(e,j){
+      var tr=el('tr');
+      tr.innerHTML='<td class="name">'+e[0]+'</td><td class="n">'+e[1]+'</td><td class="n">'+e[2]+'</td>'+
+        '<td class="n">'+e[3]+'</td><td class="n">'+e[4]+'</td><td style="font-size:12px">'+e[5]+'</td>'+
+        '<td class="n"><input type="number" step="2.5" min="0" placeholder="kg" data-wt="'+d.c+'-'+j+'"></td>';
+      body.appendChild(tr);
+    });
+    box.appendChild(tb);
+    box.appendChild(el('div','fin','<b>训练后心肺：</b>'+d.fin));
+    host.appendChild(box);
+  });
+
+  // 重量记忆
+  var saved=JSON.parse(localStorage.getItem('wo_weights')||'{}');
+  host.querySelectorAll('[data-wt]').forEach(function(inp){
+    var k=inp.getAttribute('data-wt');
+    if(saved[k]!=null) inp.value=saved[k];
+    inp.addEventListener('input',function(){
+      var s=JSON.parse(localStorage.getItem('wo_weights')||'{}');
+      if(inp.value==='') delete s[k]; else s[k]=inp.value;
+      localStorage.setItem('wo_weights',JSON.stringify(s));
+    });
+  });
+}
+
+function buildDB(){
+  var body=$('#dbtable tbody');
+  Object.keys(DB).forEach(function(k){
+    var d=DB[k], tr=el('tr');
+    var badge = d.src==='lab'
+      ? '<span class="bg lab">标签实测</span>'
+      : '<span class="bg est">成分表估算</span>';
+    tr.innerHTML='<td class="name">'+d.nm+'</td>'+
+      '<td>'+badge+'</td>'+
+      '<td class="n" style="color:var(--tx)">'+r0(d.kcal)+'</td><td class="n">'+d.p+'</td><td class="n">'+d.f+'</td>'+
+      '<td class="n">'+d.c+'</td><td class="n">'+d.fib+'</td>'+
+      '<td style="font-size:12px">'+d.note+'</td>';
+    body.appendChild(tr);
+  });
+  body.parentNode.querySelector('thead th:nth-child(3)').textContent='热量 kcal /100'+'g或mL';
+}
+
+/* ================= 记录 ================= */
+function getLog(){ 
+  var a=JSON.parse(localStorage.getItem('wo_log')||'[]');
+  a.sort(function(x,y){ return x.d<y.d?-1:1; });
+  return a;
+}
+function setLog(a){ localStorage.setItem('wo_log',JSON.stringify(a)); renderLog(); }
+
+function renderLog(){
+  var a=getLog(), body=$('#logtable tbody'); body.innerHTML='';
+  if(!a.length){
+    body.innerHTML='<tr><td colspan="8" class="empty">还没有记录。今天就是起点 —— 称个体重、量个腰围，填上去。</td></tr>';
+    drawChart([]); return;
+  }
+  a.forEach(function(r,i){
+    var pw=i>0?a[i-1].w:null, pc=i>0?a[i-1].waist:null;
+    function dlt(cur,prev,u){
+      if(prev==null||cur==null||cur==='') return '<span style="color:var(--tx3)">—</span>';
+      var v=cur-prev; if(Math.abs(v)<0.05) return '<span style="color:var(--tx3)">0</span>';
+      return '<span style="color:'+(v<0?'var(--ac)':'var(--bad)')+'">'+(v>0?'+':'')+r1(v)+u+'</span>';
+    }
+    var tr=el('tr');
+    tr.innerHTML='<td class="name">'+r.d+'</td>'+
+      '<td class="n" style="color:var(--tx)">'+(r.w!=null?r1(r.w)+' kg':'—')+'</td>'+
+      '<td class="n">'+dlt(r.w,pw,'')+'</td>'+
+      '<td class="n" style="color:var(--tx)">'+(r.waist!=null?r1(r.waist)+' cm':'—')+'</td>'+
+      '<td class="n">'+dlt(r.waist,pc,'')+'</td>'+
+      '<td class="n">'+(r.bf!=null?r1(r.bf)+' %':'—')+'</td>'+
+      '<td style="font-size:12px">'+(r.note||'')+'</td>'+
+      '<td class="n"><button class="del" data-i="'+i+'">删除</button></td>';
+    body.appendChild(tr);
+  });
+  body.querySelectorAll('.del').forEach(function(b){
+    b.onclick=function(){ var a2=getLog(); a2.splice(+b.getAttribute('data-i'),1); setLog(a2); };
+  });
+  drawChart(a);
+}
+
+function drawChart(a){
+  var cv=$('#chart'), dpr=window.devicePixelRatio||1;
+  var W=cv.clientWidth, H=260;
+  cv.width=W*dpr; cv.height=H*dpr;
+  var x=cv.getContext('2d'); x.scale(dpr,dpr);
+  x.clearRect(0,0,W,H);
+  var L=46,R=46,T=18,B=30, pw=W-L-R, ph=H-T-B;
+
+  x.strokeStyle='#2a3542'; x.lineWidth=1;
+  x.fillStyle='#5d6b7a'; x.font='11px -apple-system,"Segoe UI",sans-serif';
+
+  if(a.length<1){
+    x.fillStyle='#5d6b7a'; x.textAlign='center';
+    x.fillText('记录 2 次以上就会画出趋势线', W/2, H/2);
+    return;
+  }
+
+  var ws=a.map(function(r){return r.w;}).filter(function(v){return v!=null;});
+  var cs=a.map(function(r){return r.waist;}).filter(function(v){return v!=null;});
+  var wMin=Math.min.apply(null,ws.concat([90])), wMax=Math.max.apply(null,ws.concat([105]));
+  var cMin=cs.length?Math.min.apply(null,cs.concat([96])):90, cMax=cs.length?Math.max.apply(null,cs.concat([111])):115;
+  var wPad=(wMax-wMin)*0.15+1, cPad=(cMax-cMin)*0.15+1;
+  wMin-=wPad; wMax+=wPad; cMin-=cPad; cMax+=cPad;
+
+  function px(i){ return a.length===1 ? L+pw/2 : L+pw*i/(a.length-1); }
+  function pyW(v){ return T+ph-(v-wMin)/(wMax-wMin)*ph; }
+  function pyC(v){ return T+ph-(v-cMin)/(cMax-cMin)*ph; }
+
+  // 网格 + 左右轴刻度
+  for(var g=0;g<=4;g++){
+    var yy=T+ph*g/4;
+    x.beginPath(); x.moveTo(L,yy); x.lineTo(L+pw,yy); x.strokeStyle='#1e2732'; x.stroke();
+    x.fillStyle='#5d6b7a'; x.textAlign='right';
+    x.fillText(r1(wMax-(wMax-wMin)*g/4), L-8, yy+4);
+    x.textAlign='left';
+    x.fillText(r1(cMax-(cMax-cMin)*g/4), L+pw+8, yy+4);
+  }
+  // 目标线
+  x.setLineDash([4,4]); x.strokeStyle='#5d6b7a';
+  x.beginPath(); x.moveTo(L,pyW(90)); x.lineTo(L+pw,pyW(90)); x.stroke();
+  x.setLineDash([]);
+
+  function series(vals,color,py){
+    var pts=[];
+    a.forEach(function(r,i){ if(r[vals]!=null) pts.push([px(i),py(r[vals])]); });
+    if(!pts.length) return;
+    x.strokeStyle=color; x.lineWidth=2; x.beginPath();
+    pts.forEach(function(p,i){ i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]); });
+    x.stroke();
+    x.fillStyle=color;
+    pts.forEach(function(p){ x.beginPath(); x.arc(p[0],p[1],3.5,0,6.2832); x.fill(); });
+  }
+  series('w','#58a6ff',pyW);
+  series('waist','#d29922',pyC);
+
+  // x 轴日期
+  x.fillStyle='#5d6b7a'; x.textAlign='center';
+  var step=Math.max(1,Math.ceil(a.length/7));
+  a.forEach(function(r,i){
+    if(i%step===0||i===a.length-1) x.fillText(r.d.slice(5), px(i), H-10);
+  });
+  x.textAlign='left'; x.fillStyle='#58a6ff'; x.fillText('kg', 6, 12);
+  x.textAlign='right'; x.fillStyle='#d29922'; x.fillText('cm', W-6, 12);
+}
+
+/* ================= 事件绑定 ================= */
+document.querySelectorAll('nav button').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('nav button').forEach(function(o){o.classList.remove('on');});
+    document.querySelectorAll('.panel').forEach(function(o){o.classList.remove('on');});
+    b.classList.add('on');
+    $('#'+b.getAttribute('data-t')).classList.add('on');
+    if(b.getAttribute('data-t')==='log') drawChart(getLog());
+    window.scrollTo(0,0);
+  };
+});
+$('#meals').addEventListener('change', onEdit);
+$('#meals').addEventListener('input', onEdit);
+$('#dayseg').onclick=function(e){
+  if(e.target.tagName!=='BUTTON') return;
+  $('#dayseg').querySelectorAll('button').forEach(function(o){o.classList.remove('on');});
+  e.target.classList.add('on');
+  curDay=e.target.getAttribute('data-d');
+  buildMeals();
+};
+$('#add').onclick=function(){
+  var d=$('#i-date').value;
+  if(!d){ alert('请选日期'); return; }
+  function num(id){ var v=$(id).value; return v===''?null:parseFloat(v); }
+  var a=getLog().filter(function(r){ return r.d!==d; });
+  a.push({d:d, w:num('#i-w'), waist:num('#i-waist'), bf:num('#i-bf'), note:$('#i-note').value});
+  setLog(a);
+  $('#i-w').value=''; $('#i-waist').value=''; $('#i-bf').value=''; $('#i-note').value='';
+};
+$('#clr').onclick=function(){
+  if(confirm('确定清空全部体重/腰围记录？此操作无法撤销。')) setLog([]);
+};
+window.addEventListener('resize',function(){ if($('#log').classList.contains('on')) drawChart(getLog()); });
+
+/* ================= 初始化 ================= */
+$('#i-date').value=new Date().toISOString().slice(0,10);
+buildMeals(); buildDays(); buildDB(); renderLog();
+</script>
+</body>
+</html>
