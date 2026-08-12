@@ -170,6 +170,117 @@ canvas{width:100%;height:260px;display:block}
 .del:hover{color:var(--bad)}
 .empty{color:var(--tx3);text-align:center;padding:30px;font-size:13px}
 .foot{color:var(--tx3);font-size:12px;margin-top:34px;padding-top:16px;border-top:1px solid var(--line)}
+
+/* ---------- 版本号 ---------- */
+.ver{
+  display:inline-block;background:var(--bg3);border:1px solid var(--line);
+  color:var(--tx2);border-radius:5px;padding:2px 8px;font-size:11px;
+  font-variant-numeric:tabular-nums;
+}
+.ver b{color:var(--ac)}
+
+/* ---------- 导出/导入 ---------- */
+textarea{
+  width:100%;min-height:110px;background:var(--bg3);border:1px solid var(--line);
+  color:var(--tx);border-radius:7px;padding:10px 12px;
+  font:12px/1.5 ui-monospace,Consolas,monospace;resize:vertical;
+}
+textarea:focus{outline:none;border-color:var(--ac2)}
+.msg{font-size:12px;margin-top:8px;min-height:17px}
+.msg.ok{color:var(--ac)} .msg.err{color:var(--bad)} .msg.inf{color:var(--tx2)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+/* 手机专用单元格：桌面端隐藏 */
+td.mac,td.meta,td.vals{display:none}
+
+/* ================= 手机端 ================= */
+@media (max-width:760px){
+  body{padding-bottom:40px}
+  .wrap{padding:0 12px}
+  header{padding:18px 0 15px}
+  h1{font-size:18px;line-height:1.35}
+  .sub{font-size:12px}
+  h2{font-size:16px;margin:24px 0 10px}
+  nav button{padding:12px 13px;font-size:13px}
+  .panel{padding-top:20px}
+  .card{padding:13px 14px}
+  .stat .v{font-size:22px}
+  .g4,.g3{grid-template-columns:repeat(2,1fr)}
+  .g2{grid-template-columns:1fr}
+  .note{padding:11px 13px;font-size:13px}
+
+  /* 触控目标放大 */
+  input[type=number]{min-height:34px;width:72px;font-size:15px}
+  input[type=checkbox]{width:22px;height:22px}
+  input[type=text],input[type=date]{min-height:34px;font-size:15px}
+  .btn{min-height:40px;padding:9px 16px}
+
+  /* 饮食表 → 卡片 */
+  .meal thead{display:none}
+  .meal table,.meal tbody{display:block}
+  .meal tr{
+    display:grid;grid-template-columns:26px 1fr auto;
+    grid-template-areas:"ck nm qty" ". mac mac";
+    gap:2px 6px;align-items:center;
+    padding:10px 13px;border-bottom:1px solid #1a222c;
+  }
+  .meal td{display:block;border:none;padding:0;text-align:left}
+  .meal td.ck{grid-area:ck}
+  .meal td.nm{grid-area:nm;color:var(--tx);font-size:14px;line-height:1.3}
+  .meal td.qty{grid-area:qty;text-align:right;white-space:nowrap}
+  .meal td.mac{grid-area:mac;font-size:11px;color:var(--tx2);margin-top:3px}
+  .meal td.mac span{margin-right:9px;white-space:nowrap}
+  .meal td.mac b{color:var(--tx);font-weight:600}
+  .meal tr.sum{grid-template-areas:"nm nm nm" "mac mac mac";background:var(--bg3)}
+  .meal tr.sum td.nm{grid-area:nm;font-weight:600}
+
+  /* 训练表 → 卡片 */
+  .day thead{display:none}
+  .day table,.day tbody{display:block}
+  .day tr{
+    display:grid;grid-template-columns:1fr auto;
+    gap:3px 8px;padding:12px 13px;border-bottom:1px solid #1a222c;
+  }
+  .day td{display:block;border:none;padding:0}
+  .day td.ex{color:var(--tx);font-weight:600;font-size:15px}
+  .day td.wt{text-align:right;grid-row:1;grid-column:2}
+  .day td.wt::after{content:' kg';color:var(--tx3);font-size:11px}
+  .day td.meta{grid-column:1/-1;font-size:12px;color:var(--ac2);font-variant-numeric:tabular-nums}
+  .day td.meta span{margin-right:10px;white-space:nowrap}
+  .day td.tip{grid-column:1/-1;font-size:12px;color:var(--tx2);line-height:1.45;margin-top:2px}
+  .meal td.mac,.day td.meta,#logtable td.vals{display:block}
+  .meal td.col,.day td.col,#logtable td.col{display:none}
+
+  /* 记录明细 → 卡片 */
+  #logtable thead{display:none}
+  #logtable,#logtable tbody{display:block}
+  #logtable tr{
+    display:grid;grid-template-columns:1fr auto;gap:3px 8px;
+    padding:11px 13px;border-bottom:1px solid #1a222c;
+  }
+  #logtable td{display:block;border:none;padding:0}
+  #logtable td.dt{color:var(--tx);font-weight:600}
+  #logtable td.del{text-align:right;grid-row:1;grid-column:2}
+  #logtable td.vals{grid-column:1/-1;font-size:12px;font-variant-numeric:tabular-nums}
+  #logtable td.vals span{margin-right:10px;white-space:nowrap}
+  #logtable td.nt{grid-column:1/-1;font-size:12px;color:var(--tx2)}
+  #logtable tr.empty-row td{grid-column:1/-1;text-align:center}
+
+  /* 参考表保留横滑，但给出提示 */
+  .tw{position:relative}
+  .tw::after{
+    content:'← 左右滑动查看完整表格';position:sticky;left:0;
+    display:block;padding:6px 10px;font-size:11px;color:var(--tx3);
+    background:#141b24;border-top:1px solid var(--line);
+  }
+  canvas{height:220px}
+  .frm{gap:8px}
+  .fld{flex:1 1 45%}
+  .fld input{width:100%}
+}
+@media (max-width:400px){
+  .g4,.g3{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -178,6 +289,7 @@ canvas{width:100%;height:260px;display:block}
   <div class="wrap">
     <h1>健身 / 饮食计划 · <span>105kg → 90kg @ 20% 体脂</span></h1>
     <div class="sub">男 · 38 岁 · 184cm · 105kg · 腰围 111cm &nbsp;|&nbsp; 增肌减脂同期 · 隔天一练 · 上下肢 4 天循环 &nbsp;|&nbsp; 能量单位统一 <b>kcal</b></div>
+    <div style="margin-top:9px"><span class="ver" id="ver"></span></div>
   </div>
 </header>
 
@@ -691,15 +803,54 @@ canvas{width:100%;height:260px;display:block}
   </div>
   <div style="margin-top:12px"><button class="btn gh" id="clr">清空全部记录</button></div>
 
+  <h2>备份 / 跨设备同步</h2>
+  <div class="note w">
+    <span class="t">为什么必须做这件事</span>
+    你的记录存在浏览器的 localStorage 里，它是按 <b>设备 + 域名 + 浏览器</b> 三重隔离的：
+    <b>手机上记的电脑看不到，电脑上记的手机也看不到</b>，同一台手机换个浏览器同样不通。
+    而且<b>清一次浏览器数据，几个月的体重曲线就全没了</b>。
+    <br><br>所以：选一台设备当主记录端（建议手机，方便在健身房用），然后<b>每隔一两周导出一次存起来</b>当备份。
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h3>导出</h3>
+      <p style="font-size:13px;margin-top:0">把当前设备的体重腰围记录和训练重量打包成一段文本。</p>
+      <div class="row">
+        <button class="btn" id="exp">生成备份文本</button>
+        <button class="btn gh" id="cp">复制到剪贴板</button>
+        <button class="btn gh" id="dl">下载为文件</button>
+      </div>
+      <div class="msg inf" id="expmsg"></div>
+      <textarea id="expbox" placeholder="点「生成备份文本」后这里会出现内容" readonly style="margin-top:10px"></textarea>
+    </div>
+    <div class="card">
+      <h3>导入</h3>
+      <p style="font-size:13px;margin-top:0">把另一台设备导出的文本粘贴进来。<b>合并</b>会保留两边的记录（同一天以粘贴进来的为准）；<b>覆盖</b>会清空当前设备再写入。</p>
+      <textarea id="impbox" placeholder="在这里粘贴备份文本…"></textarea>
+      <div class="row">
+        <button class="btn" id="impm">合并导入</button>
+        <button class="btn gh" id="impr">覆盖导入</button>
+      </div>
+      <div class="msg inf" id="impmsg"></div>
+    </div>
+  </div>
+
   <div class="foot">
-    数据来源：牛油果油 / 燕麦 / 牛奶 / 蛋白粉 四项为你提供的包装标签实测值，其余为食物成分表通用值。
+数据来源：牛油果油 / 燕麦 / 牛奶 / 蛋白粉 / 每日坚果 / 生米 / 饼干 七项为你提供的包装标签实测值，其余为食物成分表通用值。
     体脂率由 RFM 公式经腰围推算，非实测。本页内容为训练与营养安排，不构成医疗建议。
+    <br><br><span class="ver" id="ver2"></span>
+    &nbsp;记录数据存在本机浏览器（localStorage），不上传任何服务器；换设备请用上面的「备份 / 跨设备同步」。
   </div>
 </section>
 
 </div><!-- /wrap -->
 
 <script>
+/* ================= 版本（deploy 脚本会自动递增，勿手改格式） ================= */
+var VERSION = 2;
+var BUILT   = '2026-08-12';
+
 /* ================= 食材库（每 100g / 100mL，热量单位 kcal） ================= */
 var DB = {
   oat:      {nm:'高纤快熟燕麦片',   src:'lab', kcal:412.0, p:12.2,  f:13.6, c:54.7, fib:10.4, u:'g',  note:'标签原文 1724 千焦 = 412 kcal · 含奇亚籽5%+亚麻籽5% · 包装建议单份30g'},
@@ -818,6 +969,15 @@ function r1(n){ return (Math.round(n*10)/10).toFixed(1); }
 
 function key(mi,ii){ return curDay+'-'+mi+'-'+ii; }
 
+/* 手机端一行式宏量摘要 */
+function macLine(m){
+  return '<span><b>'+r0(m.kcal)+'</b> kcal</span>'+
+         '<span>蛋 <b>'+r1(m.p)+'</b></span>'+
+         '<span>脂 <b>'+r1(m.f)+'</b></span>'+
+         '<span>碳 <b>'+r1(m.c)+'</b></span>'+
+         '<span>纤 <b>'+r1(m.fib)+'</b></span>';
+}
+
 function buildMeals(){
   var host = $('#meals'); host.innerHTML='';
   MENUS[curDay].forEach(function(meal,mi){
@@ -839,16 +999,18 @@ function buildMeals(){
       var d = DB[it.k];
       var tr = el('tr'); tr.id='row-'+kk;
       tr.innerHTML =
-        '<td><input type="checkbox" data-kk="'+kk+'" '+(state[kk].on?'checked':'')+'></td>'+
-        '<td class="name">'+d.nm+(it.lbl?' <span style="color:var(--tx3);font-size:12px">'+it.lbl+'</span>':'')+'</td>'+
-        '<td class="n"><input type="number" data-kk="'+kk+'" value="'+(Math.round(state[kk].g*10)/10)+'" step="5" min="0"> <span style="color:var(--tx3);font-size:11px">'+d.u+'</span></td>'+
-        '<td class="n" data-c="kcal"></td><td class="n" data-c="p"></td><td class="n" data-c="f"></td>'+
-        '<td class="n" data-c="c"></td><td class="n" data-c="fib"></td>';
+        '<td class="ck"><input type="checkbox" data-kk="'+kk+'" '+(state[kk].on?'checked':'')+'></td>'+
+        '<td class="name nm">'+d.nm+(it.lbl?' <span style="color:var(--tx3);font-size:12px">'+it.lbl+'</span>':'')+'</td>'+
+        '<td class="n qty"><input type="number" data-kk="'+kk+'" value="'+(Math.round(state[kk].g*10)/10)+'" step="5" min="0"> <span style="color:var(--tx3);font-size:11px">'+d.u+'</span></td>'+
+        '<td class="n col" data-c="kcal"></td><td class="n col" data-c="p"></td><td class="n col" data-c="f"></td>'+
+        '<td class="n col" data-c="c"></td><td class="n col" data-c="fib"></td>'+
+        '<td class="mac"></td>';
       body.appendChild(tr);
     });
     var sum = el('tr','sum');
-    sum.innerHTML='<td></td><td>小计</td><td></td><td class="n" data-s="kcal"></td><td class="n" data-s="p"></td>'+
-      '<td class="n" data-s="f"></td><td class="n" data-s="c"></td><td class="n" data-s="fib"></td>';
+    sum.innerHTML='<td class="ck"></td><td class="nm">小计</td><td class="qty"></td><td class="n col" data-s="kcal"></td><td class="n col" data-s="p"></td>'+
+      '<td class="n col" data-s="f"></td><td class="n col" data-s="c"></td><td class="n col" data-s="fib"></td>'+
+      '<td class="mac"></td>';
     sum.id='sum-'+mi; body.appendChild(sum);
 
     box.appendChild(tb); host.appendChild(box);
@@ -876,6 +1038,7 @@ function recalc(){
       row.querySelector('[data-c=f]').textContent=r1(m.f);
       row.querySelector('[data-c=c]').textContent=r1(m.c);
       row.querySelector('[data-c=fib]').textContent=r1(m.fib);
+      row.querySelector('.mac').innerHTML=macLine(m);
       for(var k in ms) ms[k]+=m[k];
     });
     var sr=document.getElementById('sum-'+mi);
@@ -884,6 +1047,7 @@ function recalc(){
     sr.querySelector('[data-s=f]').textContent=r1(ms.f);
     sr.querySelector('[data-s=c]').textContent=r1(ms.c);
     sr.querySelector('[data-s=fib]').textContent=r1(ms.fib);
+    sr.querySelector('.mac').innerHTML=macLine(ms);
     document.getElementById('mk-'+mi).textContent=r0(ms.kcal)+' kcal';
     for(var k2 in tot) tot[k2]+=ms[k2];
   });
@@ -912,7 +1076,7 @@ function drawBars(t){
 }
 
 function buildDays(){
-  var host=$('#days');
+  var host=$('#days'); host.innerHTML='';
   DAYS.forEach(function(d,i){
     var box=el('div','day');
     box.appendChild(el('div','h','<div class="t"><em>第 '+(i+1)+' 练 · '+d.c+'</em>'+d.nm+'</div><div class="d">'+d.d+'</div>'));
@@ -923,9 +1087,12 @@ function buildDays(){
     var body=tb.querySelector('tbody');
     d.ex.forEach(function(e,j){
       var tr=el('tr');
-      tr.innerHTML='<td class="name">'+e[0]+'</td><td class="n">'+e[1]+'</td><td class="n">'+e[2]+'</td>'+
-        '<td class="n">'+e[3]+'</td><td class="n">'+e[4]+'</td><td style="font-size:12px">'+e[5]+'</td>'+
-        '<td class="n"><input type="number" step="2.5" min="0" placeholder="kg" data-wt="'+d.c+'-'+j+'"></td>';
+      tr.innerHTML='<td class="name ex">'+e[0]+'</td>'+
+        '<td class="n col">'+e[1]+'</td><td class="n col">'+e[2]+'</td>'+
+        '<td class="n col">'+e[3]+'</td><td class="n col">'+e[4]+'</td>'+
+        '<td class="tip" style="font-size:12px">'+e[5]+'</td>'+
+        '<td class="n wt"><input type="number" step="2.5" min="0" placeholder="kg" data-wt="'+d.c+'-'+j+'"></td>'+
+        '<td class="meta"><span>'+e[1]+' 组 × '+e[2]+' 次</span><span>RIR '+e[3]+'</span><span>休 '+e[4]+'</span></td>';
       body.appendChild(tr);
     });
     box.appendChild(tb);
@@ -974,7 +1141,7 @@ function setLog(a){ localStorage.setItem('wo_log',JSON.stringify(a)); renderLog(
 function renderLog(){
   var a=getLog(), body=$('#logtable tbody'); body.innerHTML='';
   if(!a.length){
-    body.innerHTML='<tr><td colspan="8" class="empty">还没有记录。今天就是起点 —— 称个体重、量个腰围，填上去。</td></tr>';
+    body.innerHTML='<tr class="empty-row"><td colspan="9" class="empty">还没有记录。今天就是起点 —— 称个体重、量个腰围，填上去。</td></tr>';
     drawChart([]); return;
   }
   a.forEach(function(r,i){
@@ -985,14 +1152,21 @@ function renderLog(){
       return '<span style="color:'+(v<0?'var(--ac)':'var(--bad)')+'">'+(v>0?'+':'')+r1(v)+u+'</span>';
     }
     var tr=el('tr');
-    tr.innerHTML='<td class="name">'+r.d+'</td>'+
-      '<td class="n" style="color:var(--tx)">'+(r.w!=null?r1(r.w)+' kg':'—')+'</td>'+
-      '<td class="n">'+dlt(r.w,pw,'')+'</td>'+
-      '<td class="n" style="color:var(--tx)">'+(r.waist!=null?r1(r.waist)+' cm':'—')+'</td>'+
-      '<td class="n">'+dlt(r.waist,pc,'')+'</td>'+
-      '<td class="n">'+(r.bf!=null?r1(r.bf)+' %':'—')+'</td>'+
-      '<td style="font-size:12px">'+(r.note||'')+'</td>'+
-      '<td class="n"><button class="del" data-i="'+i+'">删除</button></td>';
+    tr.innerHTML='<td class="name dt">'+r.d+'</td>'+
+      '<td class="n col" style="color:var(--tx)">'+(r.w!=null?r1(r.w)+' kg':'—')+'</td>'+
+      '<td class="n col">'+dlt(r.w,pw,'')+'</td>'+
+      '<td class="n col" style="color:var(--tx)">'+(r.waist!=null?r1(r.waist)+' cm':'—')+'</td>'+
+      '<td class="n col">'+dlt(r.waist,pc,'')+'</td>'+
+      '<td class="n col">'+(r.bf!=null?r1(r.bf)+' %':'—')+'</td>'+
+      '<td class="nt" style="font-size:12px">'+(r.note||'')+'</td>'+
+      '<td class="n del"><button class="del" data-i="'+i+'">删除</button></td>'+
+      '<td class="vals">'+
+        '<span style="color:var(--tx)">'+(r.w!=null?r1(r.w)+' kg':'—')+'</span>'+
+        '<span>'+dlt(r.w,pw,'')+'</span>'+
+        '<span style="color:var(--tx)">'+(r.waist!=null?r1(r.waist)+' cm':'—')+'</span>'+
+        '<span>'+dlt(r.waist,pc,'')+'</span>'+
+        (r.bf!=null?'<span>体脂 '+r1(r.bf)+'%</span>':'')+
+      '</td>';
     body.appendChild(tr);
   });
   body.querySelectorAll('.del').forEach(function(b){
@@ -1066,7 +1240,101 @@ function drawChart(a){
   x.textAlign='right'; x.fillStyle='#d29922'; x.fillText('cm', W-6, 12);
 }
 
+/* ================= 备份 / 导入导出 ================= */
+function getWeights(){ return JSON.parse(localStorage.getItem('wo_weights')||'{}'); }
+
+function buildBackup(){
+  return JSON.stringify({
+    app:'work-out-dashboard', fmt:1, ver:VERSION,
+    exportedAt:new Date().toISOString(),
+    log:getLog(), weights:getWeights()
+  }, null, 1);
+}
+
+function say(id,txt,cls){
+  var e=$(id); e.textContent=txt; e.className='msg '+(cls||'inf');
+}
+
+function parseBackup(txt){
+  txt=(txt||'').trim();
+  if(!txt) throw new Error('内容是空的，先粘贴备份文本');
+  var o;
+  try{ o=JSON.parse(txt); }
+  catch(e){ throw new Error('这段文本不是有效的备份格式（JSON 解析失败）'); }
+  if(!o || o.app!=='work-out-dashboard') throw new Error('这不是本 dashboard 的备份文件');
+  if(!Array.isArray(o.log)) throw new Error('备份里缺少记录数据');
+  var log=o.log.filter(function(r){ return r && typeof r.d==='string' && /^\d{4}-\d{2}-\d{2}$/.test(r.d); });
+  return {log:log, weights:(o.weights && typeof o.weights==='object')?o.weights:{}, exportedAt:o.exportedAt};
+}
+
+function doImport(mode){
+  var d;
+  try{ d=parseBackup($('#impbox').value); }
+  catch(e){ say('#impmsg', '✕ '+e.message, 'err'); return; }
+
+  var curLog=getLog(), curW=getWeights(), added=0, updated=0;
+  if(mode==='replace'){
+    if(!confirm('覆盖导入会先清空这台设备上现有的 '+curLog.length+' 条记录，确定继续？')) return;
+    curLog=[]; curW={};
+  }
+  var byDate={};
+  curLog.forEach(function(r){ byDate[r.d]=r; });
+  d.log.forEach(function(r){
+    if(byDate[r.d]) updated++; else added++;
+    byDate[r.d]=r;                       // 同一天以导入的为准
+  });
+  var merged=Object.keys(byDate).map(function(k){ return byDate[k]; });
+  merged.sort(function(a,b){ return a.d<b.d?-1:1; });
+
+  var wKeys=0;
+  for(var k in d.weights){ curW[k]=d.weights[k]; wKeys++; }
+
+  localStorage.setItem('wo_log', JSON.stringify(merged));
+  localStorage.setItem('wo_weights', JSON.stringify(curW));
+  renderLog();
+  buildDays();                            // 重量输入框重新读取
+  say('#impmsg', '✓ 完成：新增 '+added+' 条、更新 '+updated+' 条记录，同步 '+wKeys+' 个训练重量。当前共 '+merged.length+' 条。', 'ok');
+  $('#impbox').value='';
+}
+
 /* ================= 事件绑定 ================= */
+$('#ver').innerHTML='版本 <b>v'+VERSION+'</b> · 构建 '+BUILT;
+$('#ver2').innerHTML='版本 <b>v'+VERSION+'</b> · 构建 '+BUILT;
+
+$('#exp').onclick=function(){
+  var t=buildBackup(), n=getLog().length, w=Object.keys(getWeights()).length;
+  $('#expbox').value=t;
+  say('#expmsg','✓ 已生成：'+n+' 条体重腰围记录、'+w+' 个训练重量，共 '+t.length+' 字符。','ok');
+};
+$('#cp').onclick=function(){
+  var t=$('#expbox').value;
+  if(!t){ say('#expmsg','先点「生成备份文本」','err'); return; }
+  function ok(){ say('#expmsg','✓ 已复制，去另一台设备粘贴到「导入」框里','ok'); }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(ok, function(){
+      $('#expbox').select(); say('#expmsg','自动复制被拦截，已帮你选中，手动按 Ctrl+C / 长按复制','inf');
+    });
+  }else{
+    $('#expbox').removeAttribute('readonly'); $('#expbox').select();
+    try{ document.execCommand('copy'); ok(); }
+    catch(e){ say('#expmsg','请手动按 Ctrl+C / 长按复制','inf'); }
+    $('#expbox').setAttribute('readonly','');
+  }
+};
+$('#dl').onclick=function(){
+  var t=$('#expbox').value||buildBackup();
+  $('#expbox').value=t;
+  var d=new Date(), pad=function(x){ return (x<10?'0':'')+x; };
+  var name='workout-backup-'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'.json';
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([t],{type:'application/json'}));
+  a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },0);
+  say('#expmsg','✓ 已下载 '+name+'（手机上通常在「下载」里）','ok');
+};
+$('#impm').onclick=function(){ doImport('merge'); };
+$('#impr').onclick=function(){ doImport('replace'); };
+
 document.querySelectorAll('nav button').forEach(function(b){
   b.onclick=function(){
     document.querySelectorAll('nav button').forEach(function(o){o.classList.remove('on');});
