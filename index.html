@@ -193,6 +193,11 @@ textarea:focus{outline:none;border-color:var(--ac2)}
 /* 手机专用单元格：桌面端隐藏 */
 td.mac,td.meta,td.vals{display:none}
 
+/* 训练日选择器 */
+#dsel{display:flex;flex-wrap:wrap;width:100%}
+#dsel button{flex:1 1 auto;min-width:88px;white-space:nowrap}
+#cyc{line-height:1.7}
+
 /* ================= 手机端 ================= */
 @media (max-width:760px){
   body{padding-bottom:40px}
@@ -295,9 +300,10 @@ td.mac,td.meta,td.vals{display:none}
 
 <nav>
   <div class="wrap">
-    <button class="on" data-t="ov">概览 &amp; 诊断</button>
-    <button data-t="diet">每日饮食</button>
-    <button data-t="tr">训练计划</button>
+    <button class="on" data-t="today">▶ 今日执行</button>
+    <button data-t="diet">饮食说明</button>
+    <button data-t="tr">训练说明</button>
+    <button data-t="ov">概览 &amp; 诊断</button>
     <button data-t="db">食材营养库</button>
     <button data-t="log">记录 &amp; 曲线</button>
   </div>
@@ -305,8 +311,45 @@ td.mac,td.meta,td.vals{display:none}
 
 <div class="wrap">
 
+<!-- ================= 今日执行 ================= -->
+<section class="panel on" id="today">
+
+  <div class="seg" id="dayseg" style="margin-bottom:4px">
+    <button class="on" data-d="train">训练日 · 2614 kcal</button>
+    <button data-d="rest">休息日 · 2118 kcal</button>
+  </div>
+
+  <h2>今日训练</h2>
+  <div class="card" style="margin-bottom:12px">
+    <div id="cyc" style="font-size:13px;color:var(--tx2);margin-bottom:10px"></div>
+    <div class="seg" id="dsel"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="donebtn">标记这一练已完成</button>
+      <button class="btn gh" id="allbtn">显示全部 4 天</button>
+    </div>
+    <div class="msg inf" id="cycmsg"></div>
+  </div>
+  <div id="days"></div>
+
+  <h2>今日饮食</h2>
+  <p style="margin-top:0">克数可直接改，勾掉表示没吃，汇总实时更新。香蕉<b>默认不勾</b>（你说有时吃有时不吃）。
+  详细原理和忌口说明在「<b>饮食说明</b>」页。</p>
+  <div id="meals"></div>
+
+  <h2>当日汇总</h2>
+  <div class="card">
+    <div class="bars" id="bars"></div>
+  </div>
+
+  <div class="note" style="margin-top:16px">
+    <span class="t">这一页只放执行，不放解释</span>
+    为什么这么吃、为什么这么练、卧推怎么加重、忌口怎么替换——全都挪到了
+    「<b>饮食说明</b>」和「<b>训练说明</b>」两页，需要时再翻，平时不占你在健身房的屏幕。
+  </div>
+</section>
+
 <!-- ================= 概览 ================= -->
-<section class="panel on" id="ov">
+<section class="panel" id="ov">
 
   <h2>身体现状</h2>
   <div class="grid g4">
@@ -424,9 +467,8 @@ td.mac,td.meta,td.vals{display:none}
 <!-- ================= 饮食 ================= -->
 <section class="panel" id="diet">
 
-  <h2>今日饮食</h2>
-  <p>勾选/取消可以模拟漏吃，克数可以直接改，下面的汇总和进度条会实时更新。所有热量单位都是 kcal。
-  香蕉<b>默认不勾选</b>（你说有时吃有时不吃），吃了就勾上。</p>
+  <h2>饮食说明</h2>
+  <p style="margin-top:0">每餐吃什么、克数多少、实时汇总都在「<b>▶ 今日执行</b>」页。这一页放的是<b>为什么这么吃</b>——忌口替换、练前时机、执行细则、停滞怎么办。所有热量单位都是 kcal。</p>
 
   <div class="note g">
     <span class="t">忌口已排除：茄子 · 所有菇类 · 菠菜 · 上海青 · 芹菜</span>
@@ -485,17 +527,6 @@ td.mac,td.meta,td.vals{display:none}
     </ul>
     <b>一天总量一个字没变</b>，只是把 25g 蛋白从"训后"挪到"训前"。练后 08:30 那顿 38g 蛋白仍然充足，
     所谓"练后 30 分钟窗口"其实远没有传说中那么关键，全天总量和分布更重要。
-  </div>
-  <div class="seg" id="dayseg">
-    <button class="on" data-d="train">训练日 · 2614 kcal</button>
-    <button data-d="rest">休息日 · 2118 kcal</button>
-  </div>
-
-  <div id="meals"></div>
-
-  <h2>当日汇总</h2>
-  <div class="card">
-    <div class="bars" id="bars"></div>
   </div>
 
   <h2>这套菜单相比你现在改了什么</h2>
@@ -737,7 +768,7 @@ td.mac,td.meta,td.vals{display:none}
 
   <h2>4 天循环 · 隔天一练</h2>
   <p><b>RIR</b> = 留几次余力（Reps In Reserve）。RIR 2 就是做完这组还能再做 2 次。<b>在热量缺口里千万别每组都做到力竭</b>，那样恢复跟不上，力量掉得更快。</p>
-  <div id="days"></div>
+  <p>具体动作表和重量输入在「<b>▶ 今日执行</b>」页，那里可以只显示今天要练的那一天。</p>
 
   <h2>加重规则：双递进</h2>
   <div class="note">
@@ -993,7 +1024,7 @@ td.mac,td.meta,td.vals{display:none}
 
 <script>
 /* ================= 版本（deploy 脚本会自动递增，勿手改格式） ================= */
-var VERSION = 5;
+var VERSION = 6;
 var BUILT   = '2026-08-18';
 
 /* ================= 食材库（每 100g / 100mL，热量单位 kcal） ================= */
@@ -1222,11 +1253,54 @@ function drawBars(t){
   });
 }
 
+/* ================= 训练日选择 / 循环追踪 ================= */
+var curEx = null;                                    // null = 显示全部
+
+function nextCode(c){
+  var i=0;
+  DAYS.forEach(function(d,j){ if(d.c===c) i=j; });
+  return DAYS[(i+1)%DAYS.length].c;
+}
+function getLast(){ try{ return JSON.parse(localStorage.getItem('wo_lastday')||'null'); }catch(e){ return null; } }
+function setLast(o){ localStorage.setItem('wo_lastday', JSON.stringify(o)); }
+
+function dayByCode(c){
+  var r=null;
+  DAYS.forEach(function(d){ if(d.c===c) r=d; });
+  return r;
+}
+
+function buildDaySel(){
+  var last=getLast(), due = last ? nextCode(last.c) : DAYS[0].c;
+  if(curEx===null && !window.__allDays) curEx=due;
+
+  var sel=$('#dsel'); sel.innerHTML='';
+  DAYS.forEach(function(d){
+    var b=el('button',(curEx===d.c?'on':''), d.nm.split(' · ')[0]);
+    b.setAttribute('data-x',d.c);
+    sel.appendChild(b);
+  });
+
+  var info=$('#cyc');
+  if(last){
+    var dd=dayByCode(last.c), nx=dayByCode(due);
+    info.innerHTML='上次完成：<b style="color:var(--tx)">'+last.c+' '+(dd?dd.nm:'')+'</b>'+
+      '<span style="color:var(--tx3)"> · '+last.d+'</span><br>'+
+      '今天该练：<b style="color:var(--ac)">'+due+' '+(nx?nx.nm:'')+'</b>'+
+      '<span style="color:var(--tx3)"> · 隔天一练，4 天一轮</span>';
+  }else{
+    info.innerHTML='还没有记录过训练。从 <b style="color:var(--ac)">'+DAYS[0].c+' '+DAYS[0].nm+
+      '</b> 开始，练完点下面的「标记这一练已完成」，之后每次会自动告诉你该练哪一天。';
+  }
+}
+
 function buildDays(){
   var host=$('#days'); host.innerHTML='';
-  DAYS.forEach(function(d,i){
+  DAYS.filter(function(d){ return curEx===null || d.c===curEx; }).forEach(function(d){
+    var idx=0;
+    DAYS.forEach(function(x,j){ if(x.c===d.c) idx=j; });   // 用真实序号，不受过滤影响
     var box=el('div','day');
-    box.appendChild(el('div','h','<div class="t"><em>第 '+(i+1)+' 练 · '+d.c+'</em>'+d.nm+'</div><div class="d">'+d.d+'</div>'));
+    box.appendChild(el('div','h','<div class="t"><em>第 '+(idx+1)+' 练 · '+d.c+'</em>'+d.nm+'</div><div class="d">'+d.d+'</div>'));
     var tb=el('table');
     tb.innerHTML='<thead><tr><th>动作</th><th class="n" style="width:52px">组数</th><th class="n" style="width:74px">次数</th>'+
       '<th class="n" style="width:52px">RIR</th><th class="n" style="width:88px">组间休息</th><th>要点</th>'+
@@ -1439,7 +1513,7 @@ function doImport(mode){
   localStorage.setItem('wo_log', JSON.stringify(merged));
   localStorage.setItem('wo_weights', JSON.stringify(curW));
   renderLog();
-  buildDays();                            // 重量输入框重新读取
+  buildDaySel(); buildDays();              // 重量输入框重新读取
   say('#impmsg', '✓ 完成：新增 '+added+' 条、更新 '+updated+' 条记录，同步 '+wKeys+' 个训练重量。当前共 '+merged.length+' 条。', 'ok');
   $('#impbox').value='';
 }
@@ -1494,6 +1568,36 @@ document.querySelectorAll('nav button').forEach(function(b){
 });
 $('#meals').addEventListener('change', onEdit);
 $('#meals').addEventListener('input', onEdit);
+
+$('#dsel').onclick=function(e){
+  var c=e.target.getAttribute && e.target.getAttribute('data-x');
+  if(!c) return;
+  curEx=c; window.__allDays=false;
+  buildDaySel(); buildDays(); say('#cycmsg','','inf');
+};
+$('#allbtn').onclick=function(){
+  if(curEx===null){                                  // 已是全部 -> 收回今天
+    var last=getLast();
+    curEx = last ? nextCode(last.c) : DAYS[0].c;
+    window.__allDays=false;
+    $('#allbtn').textContent='显示全部 4 天';
+  }else{
+    curEx=null; window.__allDays=true;
+    $('#allbtn').textContent='只看今天该练的';
+  }
+  buildDaySel(); buildDays();
+};
+$('#donebtn').onclick=function(){
+  var c = curEx || (getLast() ? nextCode(getLast().c) : DAYS[0].c);
+  var d = new Date(), pad=function(x){ return (x<10?'0':'')+x; };
+  var ds = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  setLast({c:c, d:ds});
+  curEx=null; window.__allDays=false;
+  curEx = nextCode(c);
+  buildDaySel(); buildDays();
+  var nx=dayByCode(curEx);
+  say('#cycmsg','✓ 已记录：'+ds+' 完成 '+c+'。下次练 '+curEx+' '+(nx?nx.nm:'')+'（隔一天）','ok');
+};
 $('#dayseg').onclick=function(e){
   if(e.target.tagName!=='BUTTON') return;
   $('#dayseg').querySelectorAll('button').forEach(function(o){o.classList.remove('on');});
@@ -1517,7 +1621,7 @@ window.addEventListener('resize',function(){ if($('#log').classList.contains('on
 
 /* ================= 初始化 ================= */
 $('#i-date').value=new Date().toISOString().slice(0,10);
-buildMeals(); buildDays(); buildDB(); renderLog();
+buildMeals(); buildDaySel(); buildDays(); buildDB(); renderLog();
 </script>
 </body>
 </html>
