@@ -1216,7 +1216,7 @@ td.mac,td.meta,td.vals{display:none}
 
 <script>
 /* ================= 版本（deploy 脚本会自动递增，勿手改格式） ================= */
-var VERSION = 11;
+var VERSION = 12;
 var BUILT   = '2026-10-08';
 
 /* ================= 食材库（默认每100g/100mL；per:1 表示每1份） ================= */
@@ -1229,6 +1229,7 @@ var DB = {
   egg_white:{nm:'蛋清',             src:'est', kcal:52.0,  p:10.9,  f:0.17, c:0.73, fib:0,    u:'g',  note:'1 个大码蛋约 37g 蛋清'},
   rice_raw: {nm:'生米（粳米）',     src:'lab', kcal:350.9, p:6.2,   f:0.8,  c:78.4, fib:0.6,  u:'g',  note:"标签原文 1468 千焦 = 351 kcal · Member's Mark 吉林粳米 · 钠 0mg · 按生米称重，煮出来约 2.8–3.0 倍熟饭 · 纤维为估算值（标签未标）"},
   noodle_raw:{nm:'干面条（挂面）',   src:'lab', kcal:359.2, p:10.7, f:1.5, c:71.8, fib:0, u:'g', note:'标签原文 1503千焦 = 359 kcal · 钠607mg/100g · 纤维标签未标，页面按0保守计算 · 一律称干重：训练日纯面方案98g/餐，休息日49g/餐 · 49g干面煮后约108–127g；面汤不喝，当天少放盐和蚝油'},
+  rice_noodle_raw:{nm:'散装干米粉', src:'est', kcal:360.0, p:6.0, f:0.8, c:82.0, fib:1.0, u:'g', note:'散装无营养标签，按普通干米粉通用值估算，实际可能有±10%差异 · 一律称干重：训练日纯米粉98g/餐，休息日49g/餐 · 米粉泡煮吸水差异大，不按熟重计算 · 若以后买到包装产品，以包装标签覆盖此估值'},
   potato_raw:{nm:'生土豆（带皮）',   src:'est', kcal:77.0,  p:2.05,  f:0.09, c:17.5, fib:2.1,  u:'g',  note:'★数字按带皮算，连皮吃才成立 · 按生重称，下锅前上秤 · 带皮整个水煮重量几乎不变（皮挡住水，进不去也出不来），230g 生 → 约 225g 熟；煮完剥皮剩约 205g，少的那 20g 是皮不是水 · 钾 425mg/100g（生米只有 35mg），纤维和钾主要集中在皮和皮下那层，剥皮会损失掉一大半 · 生土豆 230g ≈ 生米 50g 等热量 · 别切块下水，钾和维C会大量溶到水里 · 发芽或变绿的整个扔掉（茄碱，削掉芽也不够）'},
   chickpea: {nm:'有机高蛋白鹰嘴豆（干）', src:'lab', kcal:350.6, p:23.3, f:5.7, c:43.8, fib:14.5, u:'g', note:'标签原文 1467 千焦 = 351 kcal · 土耳其产有机干鹰嘴豆 · 钠 0mg / 镁 130mg / 钙 122mg / 铁 4.0mg 每100g · ★一律称干重：休息日每餐25g，泡煮后约55–65g · 普通锅浸泡5小时以上、换清水煮约90分钟；压力锅浸泡3小时以上、换清水煮约60分钟 · 泡豆水倒掉可减少部分产气低聚糖 · 每周150g干豆一次煮好，熟后平均分6份'},
   biscuit:  {nm:'饼干（练前）',     src:'lab', kcal:488.3, p:12.8,  f:19.1, c:65.8, fib:1.5,  u:'g',  note:'标签原文 2043 千焦 = 488 kcal · 1.2kg=40g×30包 · 每包 195 kcal · 反式脂肪 0g · 钠 455mg / 钙 428mg 每100g · 纤维为估算值（标签未标）'},
@@ -1259,6 +1260,7 @@ var CARB_PLANS = {
     {id:'normal', nm:'正常：米饭 + 土豆', desc:'每餐：生米50g（约140–150g熟饭）+ 生土豆230g（煮后约225g）', items:[E('rice_raw',50,'生米称重 → 约140–150g熟饭'),E('potato_raw',230,'生重·带皮整个煮 → 约225g · 连皮吃')]},
     {id:'rice', nm:'纯米饭', desc:'每餐：生米100g → 约280–300g熟饭', items:[E('rice_raw',100,'生米称重 → 约280–300g熟饭')]},
     {id:'noodle', nm:'纯面条', desc:'每餐：干面条98g → 约215–255g煮面；钠约595mg，面汤不喝', items:[E('noodle_raw',98,'干重98g → 约215–255g煮面 · 面汤不喝')]},
+    {id:'rice_noodle', nm:'纯米粉', desc:'每餐：散装干米粉98g；泡煮吸水差异大，一律按干重称', items:[E('rice_noodle_raw',98,'散装干米粉98g · 通用估值 · 不按熟重')]},
     {id:'potato', nm:'纯土豆', desc:'每餐：生土豆460g → 带皮水煮后约450g', items:[E('potato_raw',460,'生重·带皮整个煮 → 约450g · 连皮吃')]},
     {id:'chickpea', nm:'纯鹰嘴豆', desc:'每餐：干鹰嘴豆100g → 泡煮后约220–250g；碳水较默认少、蛋白和纤维更高', items:[E('chickpea',100,'干重100g → 泡煮后约220–250g')]}
   ],
@@ -1266,6 +1268,7 @@ var CARB_PLANS = {
     {id:'normal', nm:'正常：米饭 + 鹰嘴豆', desc:'每餐：生米25g（约75g熟饭）+ 干鹰嘴豆25g（熟豆约55–65g）', items:[E('rice_raw',25,'生米25g → 熟饭约75g'),E('chickpea',25,'干重25g → 泡煮后约55–65g')]},
     {id:'rice', nm:'纯米饭', desc:'每餐：生米50g → 约140–150g熟饭', items:[E('rice_raw',50,'生米称重 → 约140–150g熟饭')]},
     {id:'noodle', nm:'纯面条', desc:'每餐：干面条49g → 约108–127g煮面；钠约297mg，面汤不喝', items:[E('noodle_raw',49,'干重49g → 约108–127g煮面 · 面汤不喝')]},
+    {id:'rice_noodle', nm:'纯米粉', desc:'每餐：散装干米粉49g；泡煮吸水差异大，一律按干重称', items:[E('rice_noodle_raw',49,'散装干米粉49g · 通用估值 · 不按熟重')]},
     {id:'potato', nm:'纯土豆', desc:'每餐：生土豆230g → 带皮水煮后约225g', items:[E('potato_raw',230,'生重·带皮整个煮 → 约225g · 连皮吃')]},
     {id:'chickpea', nm:'纯鹰嘴豆', desc:'每餐：干鹰嘴豆50g → 泡煮后约110–125g', items:[E('chickpea',50,'干重50g → 泡煮后约110–125g')]}
   ]
@@ -1385,7 +1388,7 @@ function buildCarbPicker(){
   $('#carbdesc').textContent=carbPlan(curDay,carbChoice[curDay]).desc;
 }
 
-function isCarbKey(k){ return k==='rice_raw'||k==='noodle_raw'||k==='potato_raw'||k==='chickpea'; }
+function isCarbKey(k){ return k==='rice_raw'||k==='noodle_raw'||k==='rice_noodle_raw'||k==='potato_raw'||k==='chickpea'; }
 function key(mi,it,meal){
   var planScope=(meal.carb&&isCarbKey(it.k))?'-'+carbChoice[curDay]:'';
   return curDay+'-'+mi+planScope+'-'+it.k;
