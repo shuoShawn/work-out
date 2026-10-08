@@ -97,6 +97,16 @@ tbody tr.sum td{background:var(--bg3);color:var(--tx);font-weight:600;border-top
 .tw table{margin:0}
 .tw th{background:#1a222c}
 
+/* ---------- 主食临时替换 ---------- */
+.carb-switch{display:grid;grid-template-columns:auto minmax(190px,280px);gap:6px 14px;align-items:center;margin:10px 0 14px;padding:12px 14px}
+.carb-label span{display:block;color:var(--tx);font-weight:600}
+.carb-label small{display:block;color:var(--tx3);font-size:11px;font-weight:400}
+#carbsel{width:100%;background:var(--bg3);border:1px solid var(--line);color:var(--tx);border-radius:7px;padding:8px 34px 8px 10px;font:inherit;font-size:13px;cursor:pointer}
+#carbsel:focus{outline:none;border-color:var(--ac)}
+#carbdesc{grid-column:1/-1;color:var(--ac2);font-size:12px;border-top:1px solid var(--line);padding-top:7px}
+.med-line{color:var(--tx2);font-size:12px;margin:0 2px 12px}
+.med-line b{color:var(--tx)}
+
 /* ---------- meal ---------- */
 .meal{background:var(--bg2);border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
 .meal>.h{
@@ -214,6 +224,10 @@ td.mac,td.meta,td.vals{display:none}
   .g4,.g3{grid-template-columns:repeat(2,1fr)}
   .g2{grid-template-columns:1fr}
   .note{padding:11px 13px;font-size:13px}
+  .carb-switch{grid-template-columns:1fr;padding:10px 12px;gap:7px}
+  #carbdesc{grid-column:1;font-size:11px}
+  #carbsel{font-size:14px;min-height:38px}
+  .med-line{line-height:1.6;margin-bottom:10px}
 
   /* 触控目标放大 */
   input[type=number]{min-height:34px;width:72px;font-size:15px}
@@ -335,6 +349,15 @@ td.mac,td.meta,td.vals{display:none}
   <h2>今日饮食</h2>
   <p style="margin-top:0">克数可直接改，勾掉表示没吃，汇总实时更新。香蕉<b>默认不勾</b>（你说有时吃有时不吃）。
   详细原理和忌口说明在「<b>饮食说明</b>」页。</p>
+  <div class="card carb-switch">
+    <div class="carb-label">
+      <span>今日主食</span>
+      <small>同时替换午餐和晚餐；刷新后恢复正常吃法</small>
+    </div>
+    <select id="carbsel" aria-label="今日主食方案"></select>
+    <div id="carbdesc"></div>
+  </div>
+  <div class="med-line"><b>固定时间：</b>05:30 优甲乐（只配水）→ 06:15 热身后饼干 → 午餐后复合维生素1片</div>
   <div id="meals"></div>
 
   <h2>当日汇总</h2>
@@ -490,13 +513,11 @@ td.mac,td.meta,td.vals{display:none}
     <br><br><span style="color:var(--warn)">⚠ 四季豆必须完全炒熟</span><span style="color:var(--tx3);font-size:12px">——没熟透的四季豆含皂苷和血凝素，会引起呕吐腹泻。整根变色、彻底软掉再吃。</span>
   </div>
 
-  <div class="note d">
-    <span class="t">练前吃饼干的时机不对：提前量是 0 分钟</span>
-    你是热身完、正式训练开始前吃那包饼干。问题是<b>食物需要 30–60 分钟才能消化吸收进血液供能</b>，
-    而饼干每 100g 含 19.1g 脂肪（每包 7.6g），<b>脂肪会显著延缓胃排空</b>，实际到位时间只会更长。
-    <br><br>结果是两头都不讨好：这包饼干对 06:10–07:00 这段最需要发力的训练<b>几乎没有贡献</b>，能量到位时你已经快结束了；
-    而胃里装着东西做深蹲硬拉、还要憋气发力，只会让你难受。
-    <br><br><b>最小改动：把饼干挪到出门前在家吃</b>（约 05:45），到正式训练开始有 25 分钟提前量，比现在的 0 分钟强得多。
+  <div class="note g">
+    <span class="t">优甲乐与练前饼干：当前时间可以保持</span>
+    你每天 <b>05:30空腹吃优甲乐，只配白水</b>，热身结束后约 <b>06:15吃饼干</b>，两者间隔45分钟，符合优甲乐服后等待30–60分钟再进食的要求。
+    <br><br>从训练供能看，饼干每100g含19.1g脂肪（每包7.6g），消化比香蕉慢，06:15吃下去主要在训练后半段供能；
+    但你没有胃部不适或训练乏力，所以不需要为了理论时间强行改到更早。<b>不要挪到05:45</b>，那会与优甲乐只隔15分钟。
   </div>
 
   <div class="note g">
@@ -524,16 +545,16 @@ td.mac,td.meta,td.vals{display:none}
   </div>
 
   <div class="note">
-    <span class="t">还有个不花钱的改进：把那勺蛋白粉挪到练前</span>
-    你 06:00 开练，此时已经空腹一整夜（8–10 小时），而饼干只有 5g 蛋白。<b>空腹做大重量时肌肉分解率偏高</b>，
-    这在热量缺口 + 38 岁的组合下更明显。
-    <br><br>建议把早餐那勺乳清挪到练前，在家兑水摇一杯路上喝掉：
-    <ul style="margin-top:6px">
-      <li><b>练前</b>（05:45）：香蕉 + 1 勺乳清 = 237 kcal / <b>蛋白 26g</b> / 碳水 31g / 脂肪 2.4g</li>
-      <li><b>早餐</b>（08:30 练后）：燕麦 + 牛奶 + 4 个蛋 = 654 kcal / 蛋白 38g</li>
-    </ul>
-    <b>一天总量一个字没变</b>，只是把 25g 蛋白从"训后"挪到"训前"。练后 08:30 那顿 38g 蛋白仍然充足，
-    所谓"练后 30 分钟窗口"其实远没有传说中那么关键，全天总量和分布更重要。
+    <span class="t">蛋白粉保持在08:30早餐，不挪到优甲乐附近</span>
+    你05:30吃优甲乐，06:15才开始进食。当前乳清放在08:30练后早餐，全天蛋白已经够，所以没有必要为“练前蛋白”增加用药时间上的复杂度。
+    <br><br>如果某天真想把乳清挪到训练前，最早也和饼干一样放在<b>06:15</b>，不能05:45喝；全天总量保持不变即可。
+    练后08:30还有燕麦、脱脂奶和鸡蛋，蛋白仍然充足。所谓“练后30分钟窗口”没有全天总量和长期一致性重要。
+  </div>
+
+  <div class="note w">
+    <span class="t">复合维生素固定午餐后1片</span>
+    这款复合维生素含钙、铁、镁、锌，会影响优甲乐吸收，所以不要放在08:30早餐。
+    <b>午餐后1片</b>距离05:30优甲乐超过6小时，稳妥超过至少4小时的间隔要求。漏吃一天不要第二天补两片；抽血查甲状腺前要告诉医生其中含生物素，并按医生或检验科要求暂停。
   </div>
 
   <h2>这套菜单相比你现在改了什么</h2>
@@ -543,7 +564,8 @@ td.mac,td.meta,td.vals{display:none}
       <tbody>
         <tr><td class="name">＋ 每天 500–600g 蔬菜</td><td>午餐 300g、晚餐 300g，西兰花/菠菜/彩椒/香菇/番茄轮换</td><td>纤维 11g → 30g；补钾镁维C叶酸；增加饱腹感，热量代价只有 ~150 kcal</td></tr>
         <tr><td class="name">＋ 睡前坚果 25g</td><td>Member's Mark 烘烤混合坚果仁 · 1.1kg 罐装 · 25g = 157 kcal（标签实测）</td><td>脂肪 49g → 65g，护激素和关节；纯坚果无果干无糖，等热量比旧款多 2.8g 脂肪。<b>罐装必须上秤</b>——626 kcal/100g，抓错一把就吃掉半天缺口</td></tr>
-        <tr><td class="name">练前饼干挪早 / 或换香蕉</td><td>从“热身后”改到“出门前05:45”，或直接换1根香蕉</td><td>现在提前量是0分钟，能量到位时训练都快结束了。换香蕉还能省89 kcal，但脂肪会下降；详细账见下文，周期约缩到26周</td></tr>
+        <tr><td class="name">练前饼干</td><td>05:30优甲乐只配水；06:15热身后吃饼干</td><td>间隔45分钟符合用药要求。饼干消化慢但你无不适，保持实际习惯；不要挪到05:45</td></tr>
+        <tr><td class="name">复合维生素</td><td>午餐后1片</td><td>与05:30优甲乐间隔超过6小时，避开其中钙、铁、镁、锌对药物吸收的影响</td></tr>
         <tr><td class="name">餐次时间对齐早上训练</td><td>早餐从 07:00 挪到 <b>08:30（练后 1 小时）</b>；晚餐 19:00 不再标"训后"</td><td>你 06:00–07:30 练，练后那顿才是早餐。原来把晚餐当训后餐是排错了</td></tr>
         <tr><td class="name">碳水按训练日/休息日分配</td><td><b>训练日</b> 每餐生米50g + 生土豆230g／<b>休息日</b> 每餐生米25g（约75g熟饭）+ 干鹰嘴豆25g</td><td>训练日保留土豆体积和钾；休息日米饭+鹰嘴豆合起来与原225g土豆等热量，蛋白和脂肪更高</td></tr>
         <tr><td class="name">燕麦休息日减到 50g</td><td>训练日仍是 80g</td><td>你说的 80g = 330 kcal，休息日砍 30g 省 124 kcal，无痛</td></tr>
@@ -847,14 +869,14 @@ td.mac,td.meta,td.vals{display:none}
 <section class="panel" id="db">
   <h2>食材营养库</h2>
   <p>
-    <span class="bg lab">标签实测</span> = 从你提供的包装标签照片（燕麦、牛奶、牛油果油、蛋白粉、每日坚果、生米）的营养成分表直接读出来的数据。
+    <span class="bg lab">标签实测</span> = 从你提供的包装标签照片或已核对标签（燕麦、脱脂牛奶、牛油果油、蛋白粉、混合坚果、生米、干面条、鹰嘴豆、希腊酸奶）直接读取的数据。
     <span class="bg est">成分表估算</span> = 查食物成分表的通用值，可能有 ±10% 误差。
   </p>
   <div class="note">
     <span class="t">千焦 → 千卡的换算</span>
     多张国产标签写的是千焦（kJ），我全部换算成了 kcal：<code>kcal = kJ ÷ 4.184</code>。
     燕麦1724 → <b>412 kcal</b>/100g，脱脂牛奶159 → <b>38 kcal</b>/100mL，牛油果油3400 → <b>813 kcal</b>/100mL，
-    混合坚果仁2621 → <b>626 kcal</b>/100g，生米1468 → <b>351 kcal</b>/100g，鹰嘴豆1467 → <b>351 kcal</b>/100g，希腊酸奶253 → <b>60.5 kcal</b>/100g。
+    混合坚果仁2621 → <b>626 kcal</b>/100g，生米1468 → <b>351 kcal</b>/100g，干面条1503 → <b>359 kcal</b>/100g，鹰嘴豆1467 → <b>351 kcal</b>/100g，希腊酸奶253 → <b>60.5 kcal</b>/100g。
     蛋白粉是美版标签，本来就标 Calories，不用换算。
     <b>全站所有热量数字、汇总、进度条都只用 kcal</b>；千焦只在下表「备注」列里作为标签原始值保留，方便你对照包装核查。
   </div>
@@ -1183,7 +1205,7 @@ td.mac,td.meta,td.vals{display:none}
   </div>
 
   <div class="foot">
-数据来源：牛油果油 / 燕麦 / 脱脂牛奶 / 蛋白粉 / 混合坚果仁 / 生米 / 饼干 / 鹰嘴豆 / 脱脂希腊式酸奶九项为你提供的包装标签实测值，其余为食物成分表通用值。
+数据来源：牛油果油 / 燕麦 / 脱脂牛奶 / 蛋白粉 / 混合坚果仁 / 生米 / 干面条 / 饼干 / 鹰嘴豆 / 脱脂希腊式酸奶十项为你提供或已核对的包装标签实测值，其余为食物成分表通用值。
     体脂率由 RFM 公式经腰围推算，非实测。本页内容为训练与营养安排，不构成医疗建议。
     <br><br><span class="ver" id="ver2"></span>
     &nbsp;记录数据存在本机浏览器（localStorage），不上传任何服务器；换设备请用上面的「备份 / 跨设备同步」。
@@ -1194,8 +1216,8 @@ td.mac,td.meta,td.vals{display:none}
 
 <script>
 /* ================= 版本（deploy 脚本会自动递增，勿手改格式） ================= */
-var VERSION = 10;
-var BUILT   = '2026-09-27';
+var VERSION = 11;
+var BUILT   = '2026-10-08';
 
 /* ================= 食材库（默认每100g/100mL；per:1 表示每1份） ================= */
 var DB = {
@@ -1206,6 +1228,7 @@ var DB = {
   egg_whole:{nm:'全蛋（可食部）',   src:'est', kcal:143.0, p:12.6,  f:9.5,  c:0.7,  fib:0,    u:'g',  note:'山姆大码 61g/个带壳 → 可食 54.3g'},
   egg_white:{nm:'蛋清',             src:'est', kcal:52.0,  p:10.9,  f:0.17, c:0.73, fib:0,    u:'g',  note:'1 个大码蛋约 37g 蛋清'},
   rice_raw: {nm:'生米（粳米）',     src:'lab', kcal:350.9, p:6.2,   f:0.8,  c:78.4, fib:0.6,  u:'g',  note:"标签原文 1468 千焦 = 351 kcal · Member's Mark 吉林粳米 · 钠 0mg · 按生米称重，煮出来约 2.8–3.0 倍熟饭 · 纤维为估算值（标签未标）"},
+  noodle_raw:{nm:'干面条（挂面）',   src:'lab', kcal:359.2, p:10.7, f:1.5, c:71.8, fib:0, u:'g', note:'标签原文 1503千焦 = 359 kcal · 钠607mg/100g · 纤维标签未标，页面按0保守计算 · 一律称干重：训练日纯面方案98g/餐，休息日49g/餐 · 49g干面煮后约108–127g；面汤不喝，当天少放盐和蚝油'},
   potato_raw:{nm:'生土豆（带皮）',   src:'est', kcal:77.0,  p:2.05,  f:0.09, c:17.5, fib:2.1,  u:'g',  note:'★数字按带皮算，连皮吃才成立 · 按生重称，下锅前上秤 · 带皮整个水煮重量几乎不变（皮挡住水，进不去也出不来），230g 生 → 约 225g 熟；煮完剥皮剩约 205g，少的那 20g 是皮不是水 · 钾 425mg/100g（生米只有 35mg），纤维和钾主要集中在皮和皮下那层，剥皮会损失掉一大半 · 生土豆 230g ≈ 生米 50g 等热量 · 别切块下水，钾和维C会大量溶到水里 · 发芽或变绿的整个扔掉（茄碱，削掉芽也不够）'},
   chickpea: {nm:'有机高蛋白鹰嘴豆（干）', src:'lab', kcal:350.6, p:23.3, f:5.7, c:43.8, fib:14.5, u:'g', note:'标签原文 1467 千焦 = 351 kcal · 土耳其产有机干鹰嘴豆 · 钠 0mg / 镁 130mg / 钙 122mg / 铁 4.0mg 每100g · ★一律称干重：休息日每餐25g，泡煮后约55–65g · 普通锅浸泡5小时以上、换清水煮约90分钟；压力锅浸泡3小时以上、换清水煮约60分钟 · 泡豆水倒掉可减少部分产气低聚糖 · 每周150g干豆一次煮好，熟后平均分6份'},
   biscuit:  {nm:'饼干（练前）',     src:'lab', kcal:488.3, p:12.8,  f:19.1, c:65.8, fib:1.5,  u:'g',  note:'标签原文 2043 千焦 = 488 kcal · 1.2kg=40g×30包 · 每包 195 kcal · 反式脂肪 0g · 钠 455mg / 钙 428mg 每100g · 纤维为估算值（标签未标）'},
@@ -1229,22 +1252,38 @@ var EGG_W = 54.3, EGG_C = 37.0, SPRAY = 0.25;
 
 /* ================= 菜单 ================= */
 function E(k,g,lbl,opt){ return {k:k, g:g, lbl:lbl, opt:opt}; }
+
+/* 每个方案都是“每餐”份量；一个选择同时用于当天午餐和晚餐。 */
+var CARB_PLANS = {
+  train: [
+    {id:'normal', nm:'正常：米饭 + 土豆', desc:'每餐：生米50g（约140–150g熟饭）+ 生土豆230g（煮后约225g）', items:[E('rice_raw',50,'生米称重 → 约140–150g熟饭'),E('potato_raw',230,'生重·带皮整个煮 → 约225g · 连皮吃')]},
+    {id:'rice', nm:'纯米饭', desc:'每餐：生米100g → 约280–300g熟饭', items:[E('rice_raw',100,'生米称重 → 约280–300g熟饭')]},
+    {id:'noodle', nm:'纯面条', desc:'每餐：干面条98g → 约215–255g煮面；钠约595mg，面汤不喝', items:[E('noodle_raw',98,'干重98g → 约215–255g煮面 · 面汤不喝')]},
+    {id:'potato', nm:'纯土豆', desc:'每餐：生土豆460g → 带皮水煮后约450g', items:[E('potato_raw',460,'生重·带皮整个煮 → 约450g · 连皮吃')]},
+    {id:'chickpea', nm:'纯鹰嘴豆', desc:'每餐：干鹰嘴豆100g → 泡煮后约220–250g；碳水较默认少、蛋白和纤维更高', items:[E('chickpea',100,'干重100g → 泡煮后约220–250g')]}
+  ],
+  rest: [
+    {id:'normal', nm:'正常：米饭 + 鹰嘴豆', desc:'每餐：生米25g（约75g熟饭）+ 干鹰嘴豆25g（熟豆约55–65g）', items:[E('rice_raw',25,'生米25g → 熟饭约75g'),E('chickpea',25,'干重25g → 泡煮后约55–65g')]},
+    {id:'rice', nm:'纯米饭', desc:'每餐：生米50g → 约140–150g熟饭', items:[E('rice_raw',50,'生米称重 → 约140–150g熟饭')]},
+    {id:'noodle', nm:'纯面条', desc:'每餐：干面条49g → 约108–127g煮面；钠约297mg，面汤不喝', items:[E('noodle_raw',49,'干重49g → 约108–127g煮面 · 面汤不喝')]},
+    {id:'potato', nm:'纯土豆', desc:'每餐：生土豆230g → 带皮水煮后约225g', items:[E('potato_raw',230,'生重·带皮整个煮 → 约225g · 连皮吃')]},
+    {id:'chickpea', nm:'纯鹰嘴豆', desc:'每餐：干鹰嘴豆50g → 泡煮后约110–125g', items:[E('chickpea',50,'干重50g → 泡煮后约110–125g')]}
+  ]
+};
+var carbChoice = {train:'normal', rest:'normal'};
+
 var MENUS = {
   train: [
-    {nm:'练前（热身后）', tm:'06:00 · 训练 06:00–07:30', items:[
+    {nm:'练前（热身后）', tm:'06:15 · 05:30优甲乐后45分钟 · 训练06:00–07:30', items:[
       E('biscuit',40,'1 包 · 40g'),
       E('banana',120,'1 根 · 可选，默认不计入',true)]},
     {nm:'早餐（训练后）', tm:'08:30 · 练后约 1 小时', items:[
       E('oat',80), E('whey',35,'1 勺'), E('milk',200,'1 瓶'),
       E('egg_whole',2*EGG_W,'2 个全蛋'), E('egg_white',2*EGG_C,'2 个蛋清')]},
-    {nm:'午餐', tm:'12:00', items:[
-      E('rice_raw',50,'生米称重 → 约 140–150g 熟饭'),
-      E('potato_raw',230,'生重·带皮整个煮 → 约 225g · 连皮吃'),
+    {nm:'午餐', tm:'12:00 · 午餐后复合维生素1片', carb:true, items:[
       E('chk_raw',200,'生重'),
       E('broccoli',200), E('pepper',100), E('avo_oil',6*SPRAY,'喷 6 下')]},
-    {nm:'晚餐', tm:'19:00', items:[
-      E('rice_raw',50,'生米称重 → 约 140–150g 熟饭'),
-      E('potato_raw',230,'生重·带皮整个煮 → 约 225g · 连皮吃'),
+    {nm:'晚餐', tm:'19:00', carb:true, items:[
       E('chk_pre',168,'1 盒'),
       E('egg_whole',EGG_W,'1 个全蛋'), E('egg_white',3*EGG_C,'3 个蛋清'),
       E('gailan',200), E('greenbean',150), E('avo_oil',6*SPRAY,'喷 6 下')]},
@@ -1254,17 +1293,13 @@ var MENUS = {
     {nm:'早餐', tm:'07:00 · 休息日不吃饼干', items:[
       E('oat',50,'比训练日少 30g'), E('whey',35,'1 勺'), E('milk',200,'1 瓶'),
       E('egg_whole',2*EGG_W,'2 个全蛋'), E('egg_white',2*EGG_C,'2 个蛋清')]},
-    {nm:'午餐', tm:'12:00', items:[
-      E('rice_raw',25,'生米25g → 熟饭约75g'),
-      E('chickpea',25,'干重25g → 泡煮后约55–65g'),
+    {nm:'午餐', tm:'12:00 · 午餐后复合维生素1片', carb:true, items:[
       E('chk_raw',200,'生重'),
       E('broccoli',250), E('tomato',150), E('avo_oil',6*SPRAY,'喷 6 下')]},
     {nm:'下午加餐', tm:'16:00', items:[
       E('gr_yog',150,'上秤称150g'),
       E('fruit_portion',1,'苹果110g / 香蕉65g / 葡萄80g / 柚子150g / 蓝莓100g · 五选一')]},
-    {nm:'晚餐', tm:'19:00', items:[
-      E('rice_raw',25,'生米25g → 熟饭约75g'),
-      E('chickpea',25,'干重25g → 泡煮后约55–65g'),
+    {nm:'晚餐', tm:'19:00', carb:true, items:[
       E('chk_pre',168,'1 盒'),
       E('egg_whole',EGG_W,'1 个全蛋'), E('egg_white',3*EGG_C,'3 个蛋清'),
       E('gailan',250), E('greenbean',150), E('avo_oil',6*SPRAY,'喷 6 下')]},
@@ -1328,7 +1363,33 @@ function macro(k,g){ var d=DB[k], base=d.per||100; return {kcal:d.kcal*g/base, p
 function r0(n){ return Math.round(n); }
 function r1(n){ return (Math.round(n*10)/10).toFixed(1); }
 
-function key(mi,ii){ return curDay+'-'+mi+'-'+ii; }
+function carbPlan(day,id){
+  var found=CARB_PLANS[day][0];
+  CARB_PLANS[day].forEach(function(p){ if(p.id===id) found=p; });
+  return found;
+}
+function mealItems(meal){
+  if(!meal.carb) return meal.items;
+  return carbPlan(curDay,carbChoice[curDay]).items.concat(meal.items);
+}
+function buildCarbPicker(){
+  var sel=$('#carbsel');
+  if(!sel) return;
+  sel.innerHTML='';
+  CARB_PLANS[curDay].forEach(function(p){
+    var o=document.createElement('option');
+    o.value=p.id; o.textContent=p.nm;
+    if(p.id===carbChoice[curDay]) o.selected=true;
+    sel.appendChild(o);
+  });
+  $('#carbdesc').textContent=carbPlan(curDay,carbChoice[curDay]).desc;
+}
+
+function isCarbKey(k){ return k==='rice_raw'||k==='noodle_raw'||k==='potato_raw'||k==='chickpea'; }
+function key(mi,it,meal){
+  var planScope=(meal.carb&&isCarbKey(it.k))?'-'+carbChoice[curDay]:'';
+  return curDay+'-'+mi+planScope+'-'+it.k;
+}
 
 /* 手机端一行式宏量摘要 */
 function macLine(m){
@@ -1340,8 +1401,10 @@ function macLine(m){
 }
 
 function buildMeals(){
+  buildCarbPicker();
   var host = $('#meals'); host.innerHTML='';
   MENUS[curDay].forEach(function(meal,mi){
+    var items=mealItems(meal);
     var box = el('div','meal');
     var head = el('div','h');
     head.appendChild(el('div',null,'<span class="nm">'+meal.nm+'</span><span class="tm">'+meal.tm+'</span>'));
@@ -1354,8 +1417,8 @@ function buildMeals(){
       '<th class="n" style="width:64px">脂肪</th><th class="n" style="width:64px">碳水</th><th class="n" style="width:64px">纤维</th></tr></thead><tbody></tbody>';
     var body = tb.querySelector('tbody');
 
-    meal.items.forEach(function(it,ii){
-      var kk = key(mi,ii);
+    items.forEach(function(it,ii){
+      var kk = key(mi,it,meal);
       if(state[kk]===undefined) state[kk]={on:!it.opt, g:it.g};
       var d = DB[it.k];
       var tr = el('tr'); tr.id='row-'+kk;
@@ -1389,9 +1452,10 @@ function onEdit(e){
 function recalc(){
   var tot={kcal:0,p:0,f:0,c:0,fib:0};
   MENUS[curDay].forEach(function(meal,mi){
+    var items=mealItems(meal);
     var ms={kcal:0,p:0,f:0,c:0,fib:0};
-    meal.items.forEach(function(it,ii){
-      var kk=key(mi,ii), st=state[kk], row=document.getElementById('row-'+kk);
+    items.forEach(function(it,ii){
+      var kk=key(mi,it,meal), st=state[kk], row=document.getElementById('row-'+kk);
       var m=macro(it.k, st.on?st.g:0);
       row.className = st.on?'':'off';
       row.querySelector('[data-c=kcal]').textContent=r0(m.kcal);
@@ -1752,6 +1816,10 @@ document.querySelectorAll('nav button').forEach(function(b){
 });
 $('#meals').addEventListener('change', onEdit);
 $('#meals').addEventListener('input', onEdit);
+$('#carbsel').addEventListener('change',function(){
+  carbChoice[curDay]=this.value;
+  buildMeals();
+});
 
 $('#dsel').onclick=function(e){
   var c=e.target.getAttribute && e.target.getAttribute('data-x');
